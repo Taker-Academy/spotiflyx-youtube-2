@@ -1,5 +1,7 @@
 # Spotiflyx 📼
 
+![taker academy logo](https://github.com/Taker-Academy/Spotiflyx/assets/86067803/e6d18a15-5bcd-46e5-8d98-de01503e5381)
+
 Bon, comment vous dire...
 
 🎉 Félicitations 🎉
