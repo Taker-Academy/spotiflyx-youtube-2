@@ -86,12 +86,6 @@ Vous avez rapidement rédigé une liste de users stories pour le projet. Ci-dess
 - Base de données: Libre (SQL) [MongoDB interdit]
 - Docker: Obligatoire
 
-## Délivrables 📩
-
-- Votre code frontend
-- Votre code backend
-- Vos fichiers Docker
-
 ## Contraintes techniques 🛠️
 
 - Le projet doit être réalisé en équipe de 2 personnes
@@ -115,6 +109,13 @@ Vous avez rapidement rédigé une liste de users stories pour le projet. Ci-dess
 - [MySQL](https://www.mysql.com/fr/)
 - [PostgreSQL](https://www.postgresql.org/)
 
+
+## Délivrables 📩
+
+- Votre code frontend
+- Votre code backend
+- Vos fichiers Docker
+  
 ## Deadline ⏳
 
 Vous avez jusqu'au **12 Mai 2024**, 23h42 pour rendre votre projet.
