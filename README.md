@@ -100,7 +100,7 @@ Vous avez rapidement rédigé une liste de users stories pour le projet. Ci-dess
 ## Resources 📚
 
 - [Spotify API](https://developer.spotify.com/documentation/web-api/)
-- [Iframe]([https://developers.google.com/youtube/v3](https://developer.mozilla.org/fr/docs/Web/HTML/Element/iframe))
+- [Iframe](https://developer.mozilla.org/fr/docs/Web/HTML/Element/iframe)
 - [Docker](https://www.docker.com/)
 - [Docker Compose](https://docs.docker.com/compose/)
 - [React](https://fr.reactjs.org/)
