@@ -110,11 +110,10 @@ Vous avez rapidement rédigé une liste de users stories pour le projet. Ci-dess
 - [PostgreSQL](https://www.postgresql.org/)
 
 
-## Délivrables 📩
+## Les livrables attendus 📦
 
-- Votre code frontend
-- Votre code backend
-- Vos fichiers Docker
+- Votre **repository** avec le code source.
+- Vos fichiers Docker /!\
   
 ## Deadline ⏳
 
