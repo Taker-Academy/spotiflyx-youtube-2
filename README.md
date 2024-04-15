@@ -103,7 +103,7 @@ Vous avez rapidement rédigé une liste de users stories pour le projet. Ci-dess
 - [Iframe](https://developer.mozilla.org/fr/docs/Web/HTML/Element/iframe)
 - [Docker](https://www.docker.com/)
 - [Docker Compose](https://docs.docker.com/compose/)
-- [SvelteKet]([https://fr.reactjs.org/](https://kit.svelte.dev/))
+- [SvelteKit](https://kit.svelte.dev/)
 - [React](https://fr.reactjs.org/)
 - [Vue](https://vuejs.org/)
 - [Angular](https://angular.io/)
