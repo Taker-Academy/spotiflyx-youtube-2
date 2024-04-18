@@ -20,6 +20,13 @@ body{
     margin: 0 auto;
 }
 
+.container h2{
+    background-image: linear-gradient(90deg, hsl(130, 82%, 39%) 0%, hsl(0, 97%, 50%) 100%);
+    -webkit-background-clip: text;
+    color: transparent;
+    font-size: 2em;
+}
+
 nav{
     width: 100%;
     background-color: hsl(252, 30%, 100%);
@@ -63,15 +70,15 @@ nav .button{
     cursor: pointer;
     transition: all 300ms ease;
     color: white;
-    background-color: hsl(252, 75%, 60%);
+    background-color: hsl(130, 82%, 39%);
 }
 
 .btn:hover{
-    background-color: hsl(252, 50%, 44%);
+    background-color: hsl(130, 83%, 30%);
 }
 
 .link{
-    color: hsl(252, 75%, 60%);
+    color: hsl(130, 82%, 39%);
     cursor: pointer;
 }
 
