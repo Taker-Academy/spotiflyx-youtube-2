@@ -80,6 +80,7 @@ nav .button{
 .link{
     color: hsl(130, 82%, 39%);
     cursor: pointer;
+    text-decoration: none;
 }
 
 .link:hover{
