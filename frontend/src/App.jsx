@@ -12,7 +12,7 @@ function App() {
         </div>
         <div className="button">
           <a className="link" href="login.html">Connexion</a>
-          <button className="btn" onClick={() => window.location.href='../html/create_account.html'}>
+          <button className="btn" onClick={() => window.location.href='/frontend/html/login/create_account.html'}>
             Créer un compte
           </button>
         </div>
