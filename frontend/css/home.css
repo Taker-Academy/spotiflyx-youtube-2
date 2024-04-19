@@ -20,11 +20,14 @@ body{
     margin: 0 auto;
 }
 
-.container h2{
+.title{
     background-image: linear-gradient(90deg, hsl(130, 82%, 39%) 0%, hsl(0, 97%, 50%) 100%);
     -webkit-background-clip: text;
     color: transparent;
     cursor: pointer;
+    text-decoration: none;
+    font-size: 1.5em;
+    font-weight: 700;
 }
 
 nav{
@@ -87,7 +90,7 @@ nav .button{
     text-decoration: underline;
 }
 
-@media only screen and (max-width: 741px) {
+@media only screen and (max-width: 913px) {
     nav .container {
         flex-direction: column;
         align-items: center; 
