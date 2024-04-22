@@ -1,0 +1,21 @@
+version: "3"
+services:
+  postgres:
+    image: postgres:alpine
+    container_name: pix_reaction_db
+    environment:
+      POSTGRES_USER: pix_user
+      POSTGRES_PASSWORD: pixservice123
+      POSTGRES_DB: pix_reaction_db
+    volumes:
+      - /data/pix_reaction_db:/docker-entrypoint-initdb.d/
+    networks:
+      - overlay
+    ports:
+      - "5430:5430"
+    command: -p 5430
+volumes:
+  postgres-db:
+
+networks:
+  overlay:

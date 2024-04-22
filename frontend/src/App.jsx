@@ -8,7 +8,7 @@ function App() {
         <div className="container">
           <a href="#" className="title">Spotiflyx</a>
           <div className="search-bar">
-            <i className="fas fa-search"></i> {/* Utilisez la classe FontAwesome appropriée */}
+            <i className="fas fa-search"></i>
             <input type="search" placeholder="Rechercher" />
           </div>
           <div className="button">

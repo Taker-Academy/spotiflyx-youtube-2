@@ -1,6 +1,34 @@
-import React, { useEffect } from 'react';
+import { useEffect } from "react";
+import React, { useState } from 'react';
 
 function CreateAcc() {
+  const [formData, setFormData] = useState({
+    username: '',
+    email: '',
+    password: '',
+    confirmPassword: ''
+  });
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      console.log('Données du formulaire:', formData);
+      const response = await fetch('http://localhost:8080/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
     const inputs = document.querySelectorAll('.input');
 
@@ -37,7 +65,7 @@ function CreateAcc() {
           <img src="../images/undraw_sign_up_n6im.svg" alt="Illustration" />
         </div>
         <div className="login-container">
-          <form action="login.html">
+          <form onSubmit={handleSubmit}>
             <img src="../images/undraw_pic_profile_re_7g2h.svg" className="avatar" alt="Avatar" />
             <h2>Créer un compte</h2>
             <div className="input-div two">
@@ -46,7 +74,7 @@ function CreateAcc() {
               </div>
               <div>
                 <h5>Nom d'utilisateur</h5>
-                <input className="input" type="text" />
+                <input className="input" type="text" name="username" value={formData.username} onChange={handleChange} required />
               </div>
             </div>
             <div className="input-div one">
@@ -55,7 +83,7 @@ function CreateAcc() {
               </div>
               <div>
                 <h5>E-Mail</h5>
-                <input className="input" type="text" />
+                <input className="input" type="text" name="email" value={formData.email} onChange={handleChange} required />
               </div>
             </div>
             <div className="input-div two">
@@ -64,7 +92,7 @@ function CreateAcc() {
               </div>
               <div>
                 <h5>Mot de passe</h5>
-                <input className="input" type="password" />
+                <input className="input" type="password" name="password" value={formData.password} onChange={handleChange} required />
               </div>
             </div>
             <div className="input-div two">
@@ -73,7 +101,7 @@ function CreateAcc() {
               </div>
               <div>
                 <h5>Confirmer le mot de passe</h5>
-                <input className="input" type="password" />
+                <input className="input" type="password" name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} required />
               </div>
             </div>
             <a href="login.html">Déjà un compte ?</a>
