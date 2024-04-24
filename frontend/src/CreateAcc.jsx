@@ -1,5 +1,4 @@
-import { useEffect } from "react";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 function CreateAcc() {
   const [formData, setFormData] = useState({
@@ -8,6 +7,7 @@ function CreateAcc() {
     password: '',
     confirmPassword: ''
   });
+  const [error, setError] = useState('');
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -16,7 +16,11 @@ function CreateAcc() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      console.log('Données du formulaire:', formData);
+      if (formData.password !== formData.confirmPassword) {
+        setError("Les mots de passe ne correspondent pas");
+        return;
+      }
+
       const response = await fetch('http://localhost:8080/auth/register', {
         method: 'POST',
         headers: {
@@ -24,9 +28,15 @@ function CreateAcc() {
         },
         body: JSON.stringify(formData),
       });
+
+      if (!response.ok) {
+        throw new Error("Erreur lors de la création du compte");
+      }
+
       window.location.href = '/html/login.html';
     } catch (error) {
       console.error(error);
+      setError(error.message);
     }
   };
 
@@ -69,6 +79,7 @@ function CreateAcc() {
           <form onSubmit={handleSubmit}>
             <img src="../images/undraw_pic_profile_re_7g2h.svg" className="avatar" alt="Avatar" />
             <h2>Créer un compte</h2>
+            {error && <p style={{ color: 'red' }}>{error}</p>}
             <div className="input-div two">
               <div className="i">
                 <i className="fas fa-user"></i>
