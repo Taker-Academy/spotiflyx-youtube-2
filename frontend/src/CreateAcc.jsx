@@ -24,6 +24,7 @@ function CreateAcc() {
         },
         body: JSON.stringify(formData),
       });
+      window.location.href = '/html/login.html';
     } catch (error) {
       console.error(error);
     }
