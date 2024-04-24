@@ -11,7 +11,7 @@ const client = new Client({
 
 client.connect();
 
-client.query(`Select * from user`, (err, res) => {
+client.query(`Select * from userss`, (err, res) => {
     if (!err){
         console.log(res.rows);
     } else {
