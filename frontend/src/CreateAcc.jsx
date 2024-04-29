@@ -34,7 +34,7 @@ function CreateAcc() {
         throw new Error("Erreur lors de la création du compte");
       }
 
-      window.location.href = '/login';
+      window.location.href = '/auth/login';
     } catch (error) {
       console.error(error);
       setError(error.message);
