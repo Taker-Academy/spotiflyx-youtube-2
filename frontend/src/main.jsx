@@ -10,7 +10,7 @@ createRoot(document.getElementById('root')).render(
     <Routes>
       <Route path="/auth/login" element={<LoginPage />} />
       <Route path="/home" element={<App />} />
-      <Route path="/auth/create_account" element={<CreateAcc />} />
+      <Route path="/auth/register" element={<CreateAcc />} />
     </Routes>
   </Router>
 );

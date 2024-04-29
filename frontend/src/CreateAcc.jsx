@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import '../css/create_account.css';
 
 function CreateAcc() {
   const [formData, setFormData] = useState({
@@ -116,7 +117,7 @@ function CreateAcc() {
                 <input className="input" type="password" name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} required />
               </div>
             </div>
-            <a href="login.html">Déjà un compte ?</a>
+            <a href="/auth/login">Déjà un compte ?</a>
             <input type="submit" className="btn" value="Créer le compte" />
           </form>
         </div>

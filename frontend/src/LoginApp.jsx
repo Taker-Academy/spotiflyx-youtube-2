@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import '../css/login.css';
 
 function LoginPage() {
   const [email, setEmail] = useState('');
@@ -85,7 +86,7 @@ function LoginPage() {
                 <input className="input" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
               </div>
             </div>
-            <a href="create_account.html">Pas de compte ?</a>
+            <a href="/auth/register">Pas de compte ?</a>
             <input type="submit" className="btn" value="Connexion" />
           </form>
         </div>
