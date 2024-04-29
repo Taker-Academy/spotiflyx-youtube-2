@@ -6,16 +6,25 @@ const bcrypt = require('bcrypt');
 const { Pool } = require('pg');
 const { password, database } = require('pg/lib/defaults');
 const path = require('path');
+const nodemailer = require('nodemailer');
+const fs = require('fs');
+
+const htmlContent = fs.readFileSync('CreateAccEmail.html', 'utf8');
+
+const transporter = nodemailer.createTransport({
+  host: "smtp.gmail.com",
+  port: 587,
+  secure: false,
+  auth: {
+    user: "spotiflyx.taker@gmail.com",
+    pass: "jorg smvj laod lvha",
+  },
+});
 
 require('dotenv').config({
     override: true,
     path: path.join(__dirname, '.env')
 });
-
-const mailjet = require('node-mailjet').apiConnect(
-    process.env.MJ_APIKEY_PUBLIC,
-    process.env.MJ_APIKEY_PRIVATE
-  );
 
 const pool = new Pool({
     host: process.env.HOST,
@@ -47,40 +56,6 @@ server.use((req, res, next) => {
     next();
 });
 
-const sendConfirmationEmail = async (recipientEmail, username) => {
-    const request = mailjet
-      .post('send', { version: 'v3.1' })
-      .request({
-        Messages: [
-          {
-            From: {
-              Email: 'spotiflyx.taker@gmail.com',
-              Name: 'Spotiflyx',
-            },
-            To: [
-              {
-                Email: recipientEmail,
-                Name: username
-              },
-            ],
-            Subject: 'Confirmation de création de compte',
-            TemplateID: 5917772,
-            Variables: {
-              name: 'test',
-            },
-            TemplateLanguage: true,
-          },
-        ],
-      });
-  
-    try {
-      const response = await request;
-      console.log(response.body);
-    } catch (error) {
-      console.error('Error sending confirmation email:', error.statusCode, error.message);
-    }
-  };
-
 server.post('/auth/register', async (req, res) => {
     const { email, password, username } = req.body;
     try {
@@ -98,7 +73,16 @@ server.post('/auth/register', async (req, res) => {
         const insertUserResult = await pool.query(insertUserQuery, insertUserValues);
         const newUser = insertUserResult.rows[0];
 
-        await sendConfirmationEmail(newUser.email, newUser.username);
+        const info = await transporter.sendMail({
+          from: '"Spotiflyx" <spotiflyx.taker@gmail.com>',
+          to: email,
+          subject: "Bienvenue sur notre plateforme !",
+          text: `Bonjour ${username},\n\nVotre compte a été créé avec succès.`,
+          html: htmlContent,
+        });
+
+        console.log("Message sent: %s", info.messageId);
+
         const token = jwt.sign({ userId: newUser.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
         res.status(201).json({
@@ -153,7 +137,6 @@ server.post('/auth/login', async (req, res) => {
         res.status(500).json({ ok: false, message: 'Erreur lors de la connexion de l\'utilisateur' });
     }
 });
-
 
 server.listen(PORT, function() {
     console.log(`working on http://localhost:${PORT}`)
