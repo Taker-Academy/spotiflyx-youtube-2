@@ -12,8 +12,8 @@ function App() {
             <input type="search" placeholder="Rechercher" />
           </div>
           <div className="button">
-            <a className="link" href="auth/login">Connexion</a>
-            <button className="btn" onClick={() => window.location.href='../html/create_account.html'}>
+            <a className="link" href="/auth/login">Connexion</a>
+            <button className="btn" onClick={() => window.location.href='/auth/register'}>
               Créer un compte
             </button>
           </div>
