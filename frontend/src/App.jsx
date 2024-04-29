@@ -1,5 +1,5 @@
 import React from 'react';
-import '../css/home.css'
+import '/css/home.css'
 
 function App() {
   return (
@@ -12,13 +12,13 @@ function App() {
             <input type="search" placeholder="Rechercher" />
           </div>
           <div className="button">
-            <a className="link" href="login.html">Connexion</a>
+            <a className="link" href="../html/login.html">Connexion</a>
             <button className="btn" onClick={() => window.location.href='../html/create_account.html'}>
               Créer un compte
             </button>
           </div>
         </div>
-      </div>
+      </div>w
     </nav>
   );
 }

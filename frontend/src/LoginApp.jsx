@@ -49,7 +49,7 @@ function LoginPage() {
       }
       const { token, user } = await response.json();
       localStorage.setItem('token', token);
-      window.location.href = '/html/home.html';
+      window.location.href = '../home.html';
     } catch (error) {
       setError(error.message);
     }
