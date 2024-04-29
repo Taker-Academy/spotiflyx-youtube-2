@@ -1,5 +1,4 @@
 import React from 'react';
-import '../css/home.css';
 
 function App() {
   return (
@@ -18,7 +17,7 @@ function App() {
             </button>
           </div>
         </div>
-      </div>w
+      </div>
     </nav>
   );
 }
