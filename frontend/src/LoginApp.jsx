@@ -58,6 +58,7 @@ function LoginPage() {
 
   return (
     <>
+      <title>Connexion - Spotiflyx</title>
       <img className="wave" src="../images/wave.png" alt="Wave" />
       <div className="container">
         <div className="img">

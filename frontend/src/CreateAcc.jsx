@@ -71,6 +71,7 @@ function CreateAcc() {
 
   return (
     <>
+      <title>Créer mon compte - Spotiflyx</title>
       <img className="wave" src="../images/wave.png" alt="Wave" />
       <div className="container">
         <div className="img">
