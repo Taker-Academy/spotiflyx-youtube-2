@@ -138,6 +138,30 @@ server.post('/auth/login', async (req, res) => {
     }
 });
 
+server.delete('/user/remove', async (req, res) => {
+    const { userId } = req.body;
+
+    try {
+        // Assurez-vous que l'utilisateur existe
+        const userQuery = 'SELECT * FROM userss WHERE id = $1';
+        const userResult = await pool.query(userQuery, [userId]);
+
+        if (userResult.rows.length === 0) {
+            return res.status(404).json({ ok: false, message: 'Utilisateur non trouvé' });
+        }
+
+        // Supprimez l'utilisateur de la base de données
+        const deleteUserQuery = 'DELETE FROM userss WHERE id = $1';
+        await pool.query(deleteUserQuery, [userId]);
+
+        res.status(200).json({ ok: true, message: 'Utilisateur supprimé avec succès' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ ok: false, message: 'Erreur lors de la suppression de l\'utilisateur' });
+    }
+});
+
+
 server.listen(PORT, function() {
     console.log(`working on http://localhost:${PORT}`)
 });
