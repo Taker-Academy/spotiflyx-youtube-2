@@ -240,6 +240,33 @@ server.put('/user/edit', async (req, res) => {
     }
 });
 
+server.get('/user/me', async (req, res) => {
+    const { email } = req.body;
+    try {
+        // Recherche de l'utilisateur dans la base de données
+        const userQuery = 'SELECT * FROM userss WHERE email = $1';
+        const userResult = await pool.query(userQuery, [email]);
+
+        // Vérification si l'utilisateur existe
+        if (userResult.rows.length === 0) {
+            return res.status(401).json({ ok: false, message: 'Adresse e-mail incorrecte' });
+        }
+
+        const user = userResult.rows[0];
+
+        res.status(200).json({
+            ok: true,
+            data: {
+              email: user.email,
+              username: user.username
+            }
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ ok: false, message: 'Erreur lors de la récupération des informations utilisateur' });
+    }
+});
+
 server.listen(PORT, function() {
     console.log(`working on http://localhost:${PORT}`)
 });
