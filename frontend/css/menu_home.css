@@ -1,5 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
+.menu {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
 .wrapper {
     height: 100%;
     width: 330px;
@@ -11,6 +18,7 @@
     height: 100%;
     width: 270px;
     background: #404040;
+    overflow: hidden;
 }
 
 #sidebar .title {
@@ -26,11 +34,33 @@
     position: relative;
     background: #404040;
     height: 100%;
+    letter-spacing: 2px;
     width: 100%;
     list-style: none;
 }
 
 #sidebar .list-items li {
-    padding-left: 40px;
     line-height: 50px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    border-bottom: 1px solid #333;
+    transition: all 0.3s ease;
+}
+
+#sidebar .list-items li:hover {
+    border-top: 1px solid transparent;
+    border-bottom: 1px solid transparent;
+    box-shadow: 0 0 10px 3px #222;
+}
+
+#sidebar .list-items li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: 500;
+    height: 100%;
+    width: 100%;
+}
+
+#sidebar .list-items li a i {
+    margin-right: 20px;
 }
