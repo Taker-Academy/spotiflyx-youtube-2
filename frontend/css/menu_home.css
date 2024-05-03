@@ -1,0 +1,36 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+.wrapper {
+    height: 100%;
+    width: 330px;
+    position: relative;
+}
+
+.wrapper #sidebar {
+    position: fixed;
+    height: 100%;
+    width: 270px;
+    background: #404040;
+}
+
+#sidebar .title {
+    color: #f2f2f2;
+    font-size: 25px;
+    font-weight: 600;
+    line-height: 65px;
+    background: #333;
+    text-align: center;
+}
+
+#sidebar .list-items {
+    position: relative;
+    background: #404040;
+    height: 100%;
+    width: 100%;
+    list-style: none;
+}
+
+#sidebar .list-items li {
+    padding-left: 40px;
+    line-height: 50px;
+}
