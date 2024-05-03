@@ -10,6 +10,8 @@ const nodemailer = require('nodemailer');
 const fs = require('fs');
 
 const htmlContent = fs.readFileSync('CreateAccEmail.html', 'utf8');
+const htmlDelAccEmail = fs.readFileSync('DeleteAccEmail.html', 'utf8');
+const htmlChangePassEmail = fs.readFileSync('ChangePasswordEmail.html', 'utf8');
 
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
@@ -76,7 +78,7 @@ server.post('/auth/register', async (req, res) => {
         const info = await transporter.sendMail({
           from: '"Spotiflyx" <spotiflyx.taker@gmail.com>',
           to: email,
-          subject: "Bienvenue sur notre plateforme !",
+          subject: `Bienvenue sur notre plateforme ${username}!`,
           text: `Bonjour ${username},\n\nVotre compte a été créé avec succès.`,
           html: htmlContent,
         });
@@ -113,7 +115,7 @@ server.post('/auth/login', async (req, res) => {
         }
 
         const user = userResult.rows[0];
-        
+
         const passwordMatch = await bcrypt.compare(password, user.password);
         if (!passwordMatch) {
             return res.status(401).json({ ok: false, message: 'Adresse e-mail ou mot de passe incorrect' });
@@ -139,28 +141,104 @@ server.post('/auth/login', async (req, res) => {
 });
 
 server.delete('/user/remove', async (req, res) => {
-    const { userId } = req.body;
+    const { email, password } = req.body;
 
     try {
         // Assurez-vous que l'utilisateur existe
-        const userQuery = 'SELECT * FROM userss WHERE id = $1';
-        const userResult = await pool.query(userQuery, [userId]);
+        const userQuery = 'SELECT * FROM userss WHERE email = $1';
+        const userResult = await pool.query(userQuery, [email]);
 
         if (userResult.rows.length === 0) {
-            return res.status(404).json({ ok: false, message: 'Utilisateur non trouvé' });
+            return res.status(401).json({ ok: false, message: 'Adresse e-mail ou mot de passe incorrect' });
+        }
+
+        const user = userResult.rows[0];
+        
+        const passwordMatch = await bcrypt.compare(password, user.password);
+        if (!passwordMatch) {
+            return res.status(401).json({ ok: false, message: 'Adresse e-mail ou mot de passe incorrect' });
         }
 
         // Supprimez l'utilisateur de la base de données
-        const deleteUserQuery = 'DELETE FROM userss WHERE id = $1';
-        await pool.query(deleteUserQuery, [userId]);
+        const deleteUserQuery = 'DELETE FROM userss WHERE email = $1';
+        await pool.query(deleteUserQuery, [email]);
 
-        res.status(200).json({ ok: true, message: 'Utilisateur supprimé avec succès' });
+        const info = await transporter.sendMail({
+            from: '"Spotiflyx" <spotiflyx.taker@gmail.com>',
+            to: email,
+            subject: "Confirmation de suppression de compte Spotiflyx",
+            text: `Votre compte a été supprimé avec succès.`,
+            html: htmlDelAccEmail,
+        });
+  
+        console.log("Message sent: %s", info.messageId);
+
+        res.status(200).json({
+            ok: true,
+            message: 'Utilisateur supprimé avec succès',
+            data: {
+                user: {
+                    id: user.id,
+                    email: user.email,
+                }
+            }
+        });
     } catch (error) {
         console.error(error);
         res.status(500).json({ ok: false, message: 'Erreur lors de la suppression de l\'utilisateur' });
     }
 });
 
+server.put('/user/edit', async (req, res) => {
+    const { email, oldPassword, newPassword } = req.body;
+    try {
+        // Recherche de l'utilisateur dans la base de données
+        const userQuery = 'SELECT * FROM userss WHERE email = $1';
+        const userResult = await pool.query(userQuery, [email]);
+
+        // Vérification si l'utilisateur existe
+        if (userResult.rows.length === 0) {
+            return res.status(401).json({ ok: false, message: 'Adresse e-mail incorrecte' });
+        }
+
+        const user = userResult.rows[0];
+
+        // Vérification si l'ancien mot de passe correspond
+        const passwordMatch = await bcrypt.compare(oldPassword, user.password);
+        if (!passwordMatch) {
+            return res.status(401).json({ ok: false, message: 'Ancien mot de passe incorrect' });
+        }
+
+        // Mise à jour du mot de passe dans la base de données
+        const updatePasswordQuery = 'UPDATE userss SET password = $1 WHERE email = $2';
+        const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+        await pool.query(updatePasswordQuery, [hashedNewPassword, email]);
+
+        const info = await transporter.sendMail({
+            from: '"Spotiflyx" <spotiflyx.taker@gmail.com>',
+            to: email,
+            subject: "Confirmation du changement de votre mot de passe Spotiflyx",
+            text: `Votre mot de passe a était modifié avec succès.`,
+            html: htmlChangePassEmail,
+        });
+  
+        console.log("Message sent: %s", info.messageId);
+
+        res.status(200).json({
+            ok: true,
+            message: 'Mot de passe modifié avec succès',
+            data: {
+                user: {
+                    id: user.id,
+                    email: user.email,
+                }
+            }
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ ok: false, message: 'Erreur lors de la modification du mot de passe' });
+    }
+});
 
 server.listen(PORT, function() {
     console.log(`working on http://localhost:${PORT}`)
