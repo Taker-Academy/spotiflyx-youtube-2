@@ -1,8 +1,28 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import '../css/home.css';
 import '../css/menu_home.css';
 
 function App() {
+  const [image, setImage] = useState('../images/undraw_pic_profile_re_7g2h.svg');
+  const inputRef = useRef(null);
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+
+    reader.onloadend = () => {
+      setImage(reader.result);
+    };
+
+    if (file) {
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleImageClick = () => {
+    inputRef.current.click();
+  };
+
   return (
     <div>
       <header>
@@ -15,7 +35,10 @@ function App() {
                 <input type="search" placeholder="Rechercher" />
               </div>
               <div className="button">
-                <img src="../images/undraw_pic_profile_re_7g2h.svg" className="avatar" alt="Avatar" />
+                <form action="/user/profilePicture" method="post" encType="multipart/form-data">
+                  <input ref={inputRef} type="file" name="file" onChange={handleFileChange} style={{ display: 'none' }} />
+                </form>
+                <img src={image} className="avatar" alt="Avatar" onClick={handleImageClick} />
               </div>
             </div>
           </div>

@@ -267,6 +267,47 @@ server.get('/user/me', async (req, res) => {
     }
 });
 
+const multer = require('multer');
+
+// Configuration de Multer pour le téléchargement de fichiers
+const upload = multer({ dest: 'uploads/' }); // Assurez-vous que le dossier 'uploads' existe
+
+// Endpoint pour enregistrer l'image de profil de l'utilisateur
+server.post('/user/profilePicture', upload.single('file'), async (req, res) => {
+    const { email } = req.body;
+    try {
+        // Mettre à jour le chemin de l'image dans la base de données pour l'utilisateur correspondant à l'email
+        const updateQuery = 'UPDATE userss SET profile_picture = $1 WHERE email = $2';
+        await pool.query(updateQuery, [req.file.path, email]);
+
+        res.status(200).json({ ok: true, message: 'Image de profil mise à jour avec succès' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ ok: false, message: 'Erreur lors de la mise à jour de l\'image de profil' });
+    }
+});
+
+// Endpoint pour récupérer l'image de profil de l'utilisateur
+server.get('/user/profilePicture', async (req, res) => {
+    const { email } = req.body;
+    try {
+        // Récupérer le chemin de l'image de profil de l'utilisateur depuis la base de données
+        const selectQuery = 'SELECT profile_picture FROM userss WHERE email = $1';
+        const result = await pool.query(selectQuery, [email]);
+
+        if (result.rows.length === 0 || !result.rows[0].profile_picture) {
+            return res.status(404).json({ ok: false, message: 'Image de profil non trouvée' });
+        }
+
+        // Envoyer le fichier image de profil
+        res.sendFile(result.rows[0].profile_picture);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ ok: false, message: 'Erreur lors de la récupération de l\'image de profil' });
+    }
+});
+
+
 server.listen(PORT, function() {
     console.log(`working on http://localhost:${PORT}`)
 });
