@@ -1,0 +1,46 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+.header_setting {
+    background-color: hsl(252, 30%, 100%);
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    width: auto;
+    height: 2%;
+    margin: 0 auto;
+}
+
+.title_setting {
+    margin-left: 20px;
+}
+
+.block_profil {
+    display: flex;
+    flex-direction: column;
+    margin: 5% 5%;
+    background-color: hsl(252, 30%, 100%);
+    border-radius: 20px;
+}
+
+.profil_user {
+    display: flex;
+    flex-direction: row;
+    margin: 20px 20px;
+    background-color: rgb(197, 196, 196);
+    border-radius: 20px;
+    position: center;
+}
+
+.title_user {
+    margin-left: 30px;
+    margin-top: 30px;
+}
+
+.block_user {
+    margin: 5% 5%;
+}
+
+.avatar {
+    width: 20%;
+    height: auto;
+}
