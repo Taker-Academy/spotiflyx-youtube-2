@@ -12,9 +12,10 @@ const { google } = require('googleapis');
 
 const youtube = google.youtube({
     version: 'v3',
-    auth: process.env.YOUTUBE_API_KEY
+    auth: 'AIzaSyDKmLO7lPCyJLKxZK8ulB0V6nBo-nl0hbw'
 });
 
+//Emails
 const htmlContent = fs.readFileSync('CreateAccEmail.html', 'utf8');
 const htmlDelAccEmail = fs.readFileSync('DeleteAccEmail.html', 'utf8');
 const htmlChangePassEmail = fs.readFileSync('ChangePasswordEmail.html', 'utf8');
@@ -320,28 +321,68 @@ server.get('/user/profilePicture', async (req, res) => {
     }
 });
 
-// const { Storage } = require('@google-cloud/storage');
-// const storage2 = new Storage();
-// const bucketName = 'bucket_spotiflyx';
+server.post('/videos/upload', async (req, res) => {
+    const { email, videoLink } = req.body;
+    
+    try {
+        const videoId = extractVideoId(videoLink);
+        const videoDetails = await getVideoDetails(videoId);
 
-// server.post('/videos/upload', upload.single('video'), async (req, res) => {
-//     const { email } = req.body;
-//     try {
-//         // Enregistrer la vidéo dans Google Cloud Storage
-//         const bucket = storage2.bucket(bucketName);
-//         const file = bucket.file(req.file.originalname);
-//         const result = await file.save(req.file.buffer);
+        const insertVideoQuery = `
+            INSERT INTO videos (title, description, thumbnail_url, video_url, uploaded_by)
+            VALUES ($1, $2, $3, $4, $5)
+            RETURNING *
+        `;
+        const insertVideoValues = [
+            videoDetails.title,
+            videoDetails.description,
+            videoDetails.thumbnails.default.url,
+            `https://www.youtube.com/watch?v=${videoId}`,
+            email
+        ];
+        const insertVideoResult = await pool.query(insertVideoQuery, insertVideoValues);
 
-//         // Mettre à jour la base de données avec le lien vers la vidéo sur GCS
-//         const updateQuery = 'UPDATE userss SET video_path = $1 WHERE email = $2';
-//         await pool.query(updateQuery, [result[0].metadata.mediaLink, email]);
+        res.status(200).json({ ok: true, message: 'Vidéo ajoutée avec succès', videoDetails });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ ok: false, message: 'Erreur lors de l\'ajout de la vidéo' });
+    }
+});
 
-//         res.status(200).json({ ok: true, message: 'Vidéo téléchargée avec succès', videoPath: result[0].metadata.mediaLink });
-//     } catch (error) {
-//         console.error(error);
-//         res.status(500).json({ ok: false, message: 'Erreur lors du téléchargement de la vidéo' });
-//     }
-// });
+
+function extractVideoId(videoLink) {
+    const regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+    const match = videoLink.match(regex);
+
+    if (match && match[1]) {
+        return match[1];
+    } else {
+        throw new Error('Lien YouTube invalide');
+    }
+}
+
+async function getVideoDetails(videoId) {
+    const response = await youtube.videos.list({
+        part: 'snippet',
+        id: videoId
+    });
+    
+    const videoDetails = response.data.items[0].snippet;
+    return videoDetails;
+}
+
+server.get('/videos', async (req, res) => {
+    try {
+        const selectVideosQuery = 'SELECT * FROM videos';
+        const videosResult = await pool.query(selectVideosQuery);
+
+        res.status(200).json({ ok: true, videos: videosResult.rows });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ ok: false, message: 'Erreur lors de la récupération des vidéos' });
+    }
+});
+
 
 server.listen(PORT, function() {
     console.log(`working on http://localhost:${PORT}`)

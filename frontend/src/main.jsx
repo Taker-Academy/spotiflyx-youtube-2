@@ -6,6 +6,7 @@ import LoginPage from './LoginApp.jsx';
 import CreateAcc from './CreateAcc.jsx';
 import Setting_user from './Setting_user.jsx';
 import UserPage from './UserPage.jsx';
+import UploadVideos from './UploadVideos.jsx';
 
 createRoot(document.getElementById('root')).render(
   <Router>
@@ -16,6 +17,7 @@ createRoot(document.getElementById('root')).render(
       <Route path="/home" element={<App />} />
       <Route path="/user/me" element={<UserPage />} />
       <Route path="" element={<LoginPage />} />
+      <Route path="/videos/upload" element={<UploadVideos />} />
     </Routes>
   </Router>
 );
