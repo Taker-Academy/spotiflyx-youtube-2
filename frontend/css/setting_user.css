@@ -31,7 +31,7 @@ body {
 }
 
 .bg-c-lite-green {
-        background: -webkit-gradient(linear, left top, right top, from(#f29263), to(#ee5a6f));
+    background: -webkit-gradient(linear, left top, right top, from(#f29263), to(#ee5a6f));
     background: linear-gradient(to right, #ee5a6f, #f29263);
 }
 
@@ -62,6 +62,92 @@ h6 {
 .card .card-block p {
     line-height: 25px;
 }
+
+.form-container {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+  .form-container input[type="password"],
+  .form-container button {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+  .form-container input[type="password"]:focus,
+  .form-container button:focus {
+    outline: none;
+    border-color: #4CAF50;
+}
+
+  .form-container button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+}
+
+  .form-container button:hover {
+    background-color: #45a049;
+}
+
+  .form-container h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.button_pass {
+    background: linear-gradient(to right, #f29263, #ee5a6f);
+    border: none;
+    border-radius: 2rem;
+    padding: 0.6rem 2rem;
+    margin-top: 1rem;
+    color: white;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.button_pass button{
+    background: transparent;
+    font-size: 1.2rem;
+    color: white;
+    font-weight: 600;
+}
+
+.button_pass:hover {
+    background: linear-gradient(to right, #ee5a6f, #f29263);
+}
+
+
+.pass-bar{
+    background-color: hsl(252, 30%, 95%);
+    border-radius: 2rem;
+    padding: 0.6rem 1rem;
+    margin-top: 1rem;
+}
+
+.pass-bar input[type="password"] {
+    background: transparent;
+    width: 30vw;
+    margin-left: 1rem;
+    font-size: 0.9rem;
+}
+
 
 @media only screen and (min-width: 1400px){
 p {
@@ -138,5 +224,3 @@ p {
     -webkit-transition: all 0.3s ease-in-out;
     transition: all 0.3s ease-in-out;
 }
-
-

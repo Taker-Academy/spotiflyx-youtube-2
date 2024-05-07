@@ -50,13 +50,22 @@ function LoginPage() {
       }
       const { token, user } = await response.json();
       localStorage.setItem('token', token);
-      localStorage.setItem('email', email); // Stocker l'email dans le localStorage
+      // Vérifier si l'utilisateur n'est pas déjà connecté avant de stocker l'e-mail dans le localStorage
+      if (!localStorage.getItem('token')) {
+        localStorage.setItem('email', email); // Stocker l'e-mail dans le localStorage
+      }
       window.location.href = '/home';
     } catch (error) {
       setError(error.message);
     }
   };
 
+  useEffect(() => {
+    // Si l'utilisateur est déjà connecté, ne pas stocker l'e-mail
+    if (localStorage.getItem('token')) {
+      localStorage.removeItem('email');
+    }
+  }, []);
 
   return (
     <>

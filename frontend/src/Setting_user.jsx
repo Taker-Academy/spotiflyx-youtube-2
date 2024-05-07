@@ -7,7 +7,9 @@ import '../css/menu_home.css';
 function SettingUser() {
   const [userData, setUserData] = useState(null);
   const [error, setError] = useState('');
-  const [menuVisible, setMenuVisible] = useState(false); // Ajout d'un état pour la visibilité du menu
+  const [menuVisible, setMenuVisible] = useState(false);
+  const [oldPassword, setOldPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -27,6 +29,31 @@ function SettingUser() {
 
   const toggleMenu = () => {
     setMenuVisible(!menuVisible);
+  };
+
+  const handleOldPasswordChange = (e) => {
+    setOldPassword(e.target.value);
+  };
+
+  const handleNewPasswordChange = (e) => {
+    setNewPassword(e.target.value);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const email = localStorage.getItem('email');
+    try {
+      const response = await axios.put('http://localhost:8080/user/edit', {
+        email,
+        oldPassword,
+        newPassword,
+      });
+      console.log(response.data.message);
+      setOldPassword('');
+      setNewPassword('');
+    } catch (error) {
+      console.error(error.response.data.message);
+    }
   };
 
   return (
@@ -51,10 +78,10 @@ function SettingUser() {
             <nav id="sidebar">
               <div className="title">Side Menu</div>
               <ul className="list-items">
-                  <li><a href="/home"><i className="fas fa-home"></i>Home</a></li>
-                  <li><a href="/user/setting"><i className="fas fa-cog"></i>Paramètres</a></li>
-                  <li><a href="#"><i className="fas fa-user"></i>A propos</a></li>
-                  <li><a href="#"><i className="fas fa-envelope"></i>Contactez nous</a></li>
+                <li><a href="/home"><i className="fas fa-home"></i>Home</a></li>
+                <li><a href="/user/setting"><i className="fas fa-cog"></i>Paramètres</a></li>
+                <li><a href="#"><i className="fas fa-user"></i>A propos</a></li>
+                <li><a href="#"><i className="fas fa-envelope"></i>Contactez nous</a></li>
               </ul>
             </nav>
           </div>
@@ -89,7 +116,29 @@ function SettingUser() {
                       <div className="row">
                         <div className="col-sm-6">
                           <p className="m-b-10 f-w-600">Changer le mot de passe</p>
-                          <h6 className="text-muted f-w-400"></h6>
+                          <form onSubmit={handleSubmit}>
+                            <div className="pass-bar">
+                                <input
+                                  type="password"
+                                  placeholder="Ancien mot de passe"
+                                  value={oldPassword}
+                                  onChange={handleOldPasswordChange}
+                                  required
+                                />
+                              </div>
+                            <div className="pass-bar">
+                              <input
+                                type="password"
+                                placeholder="Nouveau mot de passe"
+                                value={newPassword}
+                                onChange={handleNewPasswordChange}
+                                required
+                              />
+                            </div>
+                            <div class='button_pass'>
+                              <button type="submit">Changer le mot de passe</button>
+                            </div>
+                          </form>
                         </div>
                       </div>
                       <ul className="social-link list-unstyled m-t-40 m-b-10">
