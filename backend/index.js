@@ -8,6 +8,12 @@ const { password, database } = require('pg/lib/defaults');
 const path = require('path');
 const nodemailer = require('nodemailer');
 const fs = require('fs');
+const { google } = require('googleapis');
+
+const youtube = google.youtube({
+    version: 'v3',
+    auth: process.env.YOUTUBE_API_KEY
+});
 
 const htmlContent = fs.readFileSync('CreateAccEmail.html', 'utf8');
 const htmlDelAccEmail = fs.readFileSync('DeleteAccEmail.html', 'utf8');
@@ -64,7 +70,7 @@ server.post('/auth/register', async (req, res) => {
         const userExistsQuery = 'SELECT * FROM userss WHERE email = $1 OR username = $2';
         const userExistsValues = [email, username];
         const userExistsResult = await pool.query(userExistsQuery, userExistsValues);
-        
+
         if (userExistsResult.rows.length > 0) {
             return res.status(400).json({ ok: false, message: 'Adresse e-mail ou nom d\'utilisateur déjà utilisé' });
         }
@@ -153,7 +159,7 @@ server.delete('/user/remove', async (req, res) => {
         }
 
         const user = userResult.rows[0];
-        
+
         const passwordMatch = await bcrypt.compare(password, user.password);
         if (!passwordMatch) {
             return res.status(401).json({ ok: false, message: 'Adresse e-mail ou mot de passe incorrect' });
@@ -170,7 +176,7 @@ server.delete('/user/remove', async (req, res) => {
             text: `Votre compte a été supprimé avec succès.`,
             html: htmlDelAccEmail,
         });
-  
+
         console.log("Message sent: %s", info.messageId);
 
         res.status(200).json({
@@ -221,7 +227,7 @@ server.put('/user/edit', async (req, res) => {
             text: `Votre mot de passe a était modifié avec succès.`,
             html: htmlChangePassEmail,
         });
-  
+
         console.log("Message sent: %s", info.messageId);
 
         res.status(200).json({
@@ -270,7 +276,16 @@ server.get('/user/me', async (req, res) => {
 const multer = require('multer');
 
 // Configuration de Multer pour le téléchargement de fichiers
-const upload = multer({ dest: 'uploads/' }); // Assurez-vous que le dossier 'uploads' existe
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'uploads/');
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.originalname);
+    }
+});
+
+const upload = multer({ storage: storage });
 
 // Endpoint pour enregistrer l'image de profil de l'utilisateur
 server.post('/user/profilePicture', upload.single('file'), async (req, res) => {
@@ -291,7 +306,6 @@ server.post('/user/profilePicture', upload.single('file'), async (req, res) => {
 server.get('/user/profilePicture', async (req, res) => {
     const { email } = req.body;
     try {
-        // Récupérer le chemin de l'image de profil de l'utilisateur depuis la base de données
         const selectQuery = 'SELECT profile_picture FROM userss WHERE email = $1';
         const result = await pool.query(selectQuery, [email]);
 
@@ -299,7 +313,6 @@ server.get('/user/profilePicture', async (req, res) => {
             return res.status(404).json({ ok: false, message: 'Image de profil non trouvée' });
         }
 
-        // Envoyer le fichier image de profil
         res.sendFile(result.rows[0].profile_picture);
     } catch (error) {
         console.error(error);
@@ -307,6 +320,28 @@ server.get('/user/profilePicture', async (req, res) => {
     }
 });
 
+// const { Storage } = require('@google-cloud/storage');
+// const storage2 = new Storage();
+// const bucketName = 'bucket_spotiflyx';
+
+// server.post('/videos/upload', upload.single('video'), async (req, res) => {
+//     const { email } = req.body;
+//     try {
+//         // Enregistrer la vidéo dans Google Cloud Storage
+//         const bucket = storage2.bucket(bucketName);
+//         const file = bucket.file(req.file.originalname);
+//         const result = await file.save(req.file.buffer);
+
+//         // Mettre à jour la base de données avec le lien vers la vidéo sur GCS
+//         const updateQuery = 'UPDATE userss SET video_path = $1 WHERE email = $2';
+//         await pool.query(updateQuery, [result[0].metadata.mediaLink, email]);
+
+//         res.status(200).json({ ok: true, message: 'Vidéo téléchargée avec succès', videoPath: result[0].metadata.mediaLink });
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).json({ ok: false, message: 'Erreur lors du téléchargement de la vidéo' });
+//     }
+// });
 
 server.listen(PORT, function() {
     console.log(`working on http://localhost:${PORT}`)
