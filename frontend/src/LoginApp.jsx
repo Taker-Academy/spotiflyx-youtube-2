@@ -50,11 +50,13 @@ function LoginPage() {
       }
       const { token, user } = await response.json();
       localStorage.setItem('token', token);
+      localStorage.setItem('email', email); // Stocker l'email dans le localStorage
       window.location.href = '/home';
     } catch (error) {
       setError(error.message);
     }
   };
+
 
   return (
     <>

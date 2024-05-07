@@ -247,14 +247,13 @@ server.put('/user/edit', async (req, res) => {
     }
 });
 
-server.get('/user/me', async (req, res) => {
-    const { email } = req.body;
+server.get('/user/setting', async (req, res) => {
+    const { email } = req.query; // Utilisez req.query pour récupérer les paramètres de requête
+
     try {
-        // Recherche de l'utilisateur dans la base de données
         const userQuery = 'SELECT * FROM userss WHERE email = $1';
         const userResult = await pool.query(userQuery, [email]);
 
-        // Vérification si l'utilisateur existe
         if (userResult.rows.length === 0) {
             return res.status(401).json({ ok: false, message: 'Adresse e-mail incorrecte' });
         }
@@ -273,7 +272,6 @@ server.get('/user/me', async (req, res) => {
         res.status(500).json({ ok: false, message: 'Erreur lors de la récupération des informations utilisateur' });
     }
 });
-
 const multer = require('multer');
 
 // Configuration de Multer pour le téléchargement de fichiers
