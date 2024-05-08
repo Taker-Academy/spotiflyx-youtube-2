@@ -9,13 +9,14 @@ import UserPage from './UserPage.jsx';
 import UploadVideos from './UploadVideos.jsx';
 
 const PrivateRoute = ({ element, ...props }) => {
-  const token = localStorage.getItem('token');
   const email = localStorage.getItem('email');
 
-  if (!token || !email) {
+  // Vérification du token et de l'email
+  if (!email) {
     return <Navigate to="/auth/login" />;
   }
 
+  // Si les deux sont présents, rendre l'élément protégé
   return element;
 };
 
@@ -24,11 +25,11 @@ const CustomRoutes = () => {
     <Routes>
       <Route path="/auth/login" element={<LoginPage />} />
       <Route path="/auth/register" element={<CreateAcc />} />
+      <Route path="" element={<LoginPage />} />
       <Route path="/user/setting" element={<PrivateRoute element={<Setting_user />} />} />
       <Route path="/home" element={<PrivateRoute element={<App />} />} />
       <Route path="/user/me" element={<PrivateRoute element={<UserPage />} />} />
       <Route path="/videos/upload" element={<PrivateRoute element={<UploadVideos />} />} />
-      <Route path="*" element={<LoginPage />} />
     </Routes>
   );
 };
