@@ -203,7 +203,6 @@ server.put('/user/edit', async (req, res) => {
         const userQuery = 'SELECT * FROM userss WHERE email = $1';
         const userResult = await pool.query(userQuery, [email]);
 
-        // Vérification si l'utilisateur existe
         if (userResult.rows.length === 0) {
             return res.status(401).json({ ok: false, message: 'Adresse e-mail incorrecte' });
         }
@@ -248,7 +247,7 @@ server.put('/user/edit', async (req, res) => {
 });
 
 server.get('/user/setting', async (req, res) => {
-    const { email } = req.query; // Utilisez req.query pour récupérer les paramètres de requête
+    const { email } = req.query;
 
     try {
         const userQuery = 'SELECT * FROM userss WHERE email = $1';
@@ -320,9 +319,18 @@ server.get('/user/profilePicture', async (req, res) => {
 });
 
 server.post('/videos/upload', async (req, res) => {
-    const { email, videoLink } = req.body;
-    
+    const { title, videoLink, email } = req.body;
+
     try {
+        const userQuery = 'SELECT * FROM userss WHERE email = $1';
+        const userResult = await pool.query(userQuery, [email]);
+
+        if (userResult.rows.length === 0) {
+            return res.status(401).json({ ok: false, message: 'Adresse e-mail incorrecte' });
+        }
+
+        const user = userResult.rows[0];
+
         const videoId = extractVideoId(videoLink);
         const videoDetails = await getVideoDetails(videoId);
 
@@ -332,11 +340,11 @@ server.post('/videos/upload', async (req, res) => {
             RETURNING *
         `;
         const insertVideoValues = [
-            videoDetails.title,
+            title, // Use the provided title
             videoDetails.description,
             videoDetails.thumbnails.default.url,
             `https://www.youtube.com/watch?v=${videoId}`,
-            email
+            user.username
         ];
         const insertVideoResult = await pool.query(insertVideoQuery, insertVideoValues);
 
@@ -346,7 +354,6 @@ server.post('/videos/upload', async (req, res) => {
         res.status(500).json({ ok: false, message: 'Erreur lors de l\'ajout de la vidéo' });
     }
 });
-
 
 function extractVideoId(videoLink) {
     const regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
@@ -380,7 +387,6 @@ server.get('/videos', async (req, res) => {
         res.status(500).json({ ok: false, message: 'Erreur lors de la récupération des vidéos' });
     }
 });
-
 
 server.listen(PORT, function() {
     console.log(`working on http://localhost:${PORT}`)
