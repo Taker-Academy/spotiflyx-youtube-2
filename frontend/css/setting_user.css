@@ -120,6 +120,7 @@ h6 {
     font-weight: bold;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    margin-bottom: 1rem;
 }
 
 .button_pass button{
@@ -147,6 +148,20 @@ h6 {
     margin-left: 1rem;
     font-size: 0.9rem;
 }
+
+.lien_user{
+    background: linear-gradient(to right, #f29263, #ee5a6f);
+    border: none;
+    border-radius: 2rem;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    font-weight: bold;
+    font-size: 1.5rem;
+    width: 15rem;
+    height: 3.5rem;
+}
+
 
 
 @media only screen and (min-width: 1400px){

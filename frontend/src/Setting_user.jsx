@@ -138,14 +138,15 @@ function SettingUser() {
                             <div class='button_pass'>
                               <button type="submit">Changer le mot de passe</button>
                             </div>
+                            <h6 className="m-b-20 p-b-5 b-b-default f-w-600">Connection</h6>
+                            <div className="row">
+                            <div className="col-sm-6">
+                                <a href="/auth/login" className='lien_user'>Se déconnecter</a>
+                              </div>
+                            </div>
                           </form>
                         </div>
                       </div>
-                      <ul className="social-link list-unstyled m-t-40 m-b-10">
-                        <li key="facebook"><a href="#!" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="facebook" data-abc="true"><i className="mdi mdi-facebook feather icon-facebook facebook" aria-hidden="true"></i></a></li>
-                        <li key="twitter"><a href="#!" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="twitter" data-abc="true"><i className="mdi mdi-twitter feather icon-twitter twitter" aria-hidden="true"></i></a></li>
-                        <li key="instagram"><a href="#!" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="instagram" data-abc="true"><i className="mdi mdi-instagram feather icon-instagram instagram" aria-hidden="true"></i></a></li>
-                      </ul>
                     </div>
                   </div>
                 </div>
