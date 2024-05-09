@@ -408,6 +408,31 @@ server.get('/videos/:id', async (req, res) => {
     }
 });
 
+server.post('/videos/like/:id', async (req, res) => {
+    try {
+        const videoId = req.params.id;
+        const selectVideoQuery = 'SELECT * FROM videos WHERE id = $1';
+        const videoResult = await pool.query(selectVideoQuery, [videoId]);
+
+        if (videoResult.rows.length === 0) {
+            return res.status(404).json({ ok: false, message: 'Vidéo introuvable' });
+        }
+
+        // Incrémente le nombre de likes pour la vidéo
+        const incrementLikesQuery = 'UPDATE videos SET likes = likes + 1 WHERE id = $1';
+        await pool.query(incrementLikesQuery, [videoId]);
+
+        // Récupère le nouveau nombre de likes pour la vidéo
+        const updatedVideoResult = await pool.query(selectVideoQuery, [videoId]);
+        const newLikesCount = updatedVideoResult.rows[0].likes;
+
+        res.status(200).json({ ok: true, likes: newLikesCount });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ ok: false, message: `Erreur lors de l'incrémentation du nombre de likes` });
+    }
+});
+
 
 server.listen(PORT, function() {
     console.log(`working on http://localhost:${PORT}`)

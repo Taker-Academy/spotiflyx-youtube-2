@@ -22,6 +22,25 @@ function VideoPage() {
     return <div>Loading...</div>;
   }
 
+  const handleLike = async () => {
+    try {
+      const response = await fetch(`http://localhost:8080/videos/like/${videoId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      const data = await response.json();
+      // Mettez à jour l'état local avec le nouveau nombre de j'aime
+      setVideoDetails(prevState => ({
+        ...prevState,
+        likes: data.likes
+      }));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <div>
       <h2>{videoDetails.title}</h2>
@@ -33,6 +52,15 @@ function VideoPage() {
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowFullScreen
       ></iframe>
+      <br></br>
+      <i className="fa-regular fa-thumbs-up"></i>
+      <button onClick={handleLike}>J'aime</button>
+      <br></br>
+      <i className="fa-solid fa-thumbs-up"></i>
+      <br></br>
+      <i className="fa-regular fa-bookmark"></i>
+      <br></br>
+      <i className="fa-solid fa-bookmark"></i>
       {/* Ajoutez ici d'autres informations sur la vidéo */}
     </div>
   );
