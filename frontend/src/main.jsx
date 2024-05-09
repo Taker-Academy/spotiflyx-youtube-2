@@ -7,16 +7,15 @@ import CreateAcc from './CreateAcc.jsx';
 import Setting_user from './Setting_user.jsx';
 import UserPage from './UserPage.jsx';
 import UploadVideos from './UploadVideos.jsx';
+import VideoPage from './VideoPage.jsx';
 
 const PrivateRoute = ({ element, ...props }) => {
   const email = localStorage.getItem('email');
 
-  // Vérification du token et de l'email
   if (!email) {
     return <Navigate to="/auth/login" />;
   }
 
-  // Si les deux sont présents, rendre l'élément protégé
   return element;
 };
 
@@ -30,6 +29,7 @@ const CustomRoutes = () => {
       <Route path="/home" element={<PrivateRoute element={<App />} />} />
       <Route path="/user/me" element={<PrivateRoute element={<UserPage />} />} />
       <Route path="/videos/upload" element={<PrivateRoute element={<UploadVideos />} />} />
+      <Route path="/videos/:videoId" element={<VideoPage />} />
     </Routes>
   );
 };

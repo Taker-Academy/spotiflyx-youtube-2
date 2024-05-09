@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import '../css/home.css';
 import '../css/menu_home.css';
 
@@ -62,14 +63,15 @@ function App() {
         <div>
             <h1>Liste des vidéos</h1>
             <div>
-                {videos.map(video => (
-                    <div key={video.id}>
-                        <h2>{video.title}</h2>
-                        <p>Ajoutée par : {video.uploaded_by}</p>
-                        <button onClick={() => setSelectedVideoId(video.id)}>Regarder</button>
-                    </div>
-                ))}
-                {selectedVideoId && <VideoPlayer videoId={selectedVideoId} />}
+            {videos.map(video => (
+              <div key={video.id}>
+                <h2>{video.title}</h2>
+                <img src={video.thumbnail_url} alt="Miniature" style={{ width: '300px', height: 'auto' }} />
+                <p>{video.uploaded_by}</p>
+                <Link to={`/videos/${video.id}`}>Regarder</Link>  
+              </div>
+            ))}
+            {selectedVideoId && <VideoPlayer videoId={selectedVideoId} />}
             </div>
         </div>
         <div className={`menu ${menuVisible ? 'visible' : ''}`}>

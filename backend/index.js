@@ -334,6 +334,8 @@ server.post('/videos/upload', async (req, res) => {
         const videoId = extractVideoId(videoLink);
         const videoDetails = await getVideoDetails(videoId);
 
+        const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+
         const insertVideoQuery = `
             INSERT INTO videos (title, description, thumbnail_url, video_url, uploaded_by)
             VALUES ($1, $2, $3, $4, $5)
@@ -342,7 +344,7 @@ server.post('/videos/upload', async (req, res) => {
         const insertVideoValues = [
             title, // Use the provided title
             videoDetails.description,
-            videoDetails.thumbnails.default.url,
+            thumbnailUrl,
             `https://www.youtube.com/watch?v=${videoId}`,
             user.username
         ];
@@ -387,6 +389,25 @@ server.get('/videos', async (req, res) => {
         res.status(500).json({ ok: false, message: 'Erreur lors de la récupération des vidéos' });
     }
 });
+
+server.get('/videos/:id', async (req, res) => {
+    try {
+        const videoId = req.params.id;
+        const selectVideoQuery = 'SELECT * FROM videos WHERE id = $1';
+        const videoResult = await pool.query(selectVideoQuery, [videoId]);
+
+        if (videoResult.rows.length === 0) {
+            return res.status(404).json({ ok: false, message: 'Vidéo introuvable' });
+        }
+
+        // Si une vidéo est trouvée, renvoyer les détails de la vidéo
+        res.status(200).json({ ok: true, video: videoResult.rows[0] });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ ok: false, message: 'Erreur lors de la récupération de la vidéo' });
+    }
+});
+
 
 server.listen(PORT, function() {
     console.log(`working on http://localhost:${PORT}`)
