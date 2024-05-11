@@ -54,7 +54,7 @@ function VideoPage() {
       ></iframe>
       <br></br>
       <i className="fa-regular fa-thumbs-up"></i>
-      <button onClick={handleLike}>J'aime</button>
+      <button onClick={handleLike}>J'aime ({videoDetails.likes})</button> {/* Afficher le nombre de likes */}
       <br></br>
       <i className="fa-solid fa-thumbs-up"></i>
       <br></br>

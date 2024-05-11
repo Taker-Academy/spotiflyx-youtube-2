@@ -3,22 +3,6 @@ import { Link } from 'react-router-dom';
 import '../css/home.css';
 import '../css/menu_home.css';
 
-function VideoPlayer({ videoId }) {
-  return (
-      <div>
-          <h2>Lecture de la vidéo</h2>
-          <iframe
-              width="560"
-              height="315"
-              src={`https://www.youtube.com/embed/${videoId}`}
-              title="YouTube video player"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-          ></iframe>
-      </div>
-  );
-}
-
 function App() {
 
   const [videos, setVideos] = useState([]);
@@ -71,7 +55,6 @@ function App() {
                 <Link to={`/videos/${video.id}`}>Regarder</Link>  
               </div>
             ))}
-            {selectedVideoId && <VideoPlayer videoId={selectedVideoId} />}
             </div>
         </div>
         <div className={`menu ${menuVisible ? 'visible' : ''}`}>
