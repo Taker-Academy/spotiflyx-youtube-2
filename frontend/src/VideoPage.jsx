@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom'; // Importez useParams
+import { useParams } from 'react-router-dom';
 
 function VideoPage() {
-  const { videoId } = useParams(); // Utilisez useParams pour obtenir les paramètres d'URL
+  const { videoId } = useParams();
   const [videoDetails, setVideoDetails] = useState(null);
 
   useEffect(() => {
@@ -30,14 +30,19 @@ function VideoPage() {
           'Content-Type': 'application/json'
         }
       });
+  
+      if (!response.ok) {
+        throw new Error('Failed to like the video');
+      }
+  
       const data = await response.json();
-      // Mettez à jour l'état local avec le nouveau nombre de j'aime
       setVideoDetails(prevState => ({
         ...prevState,
         likes: data.likes
       }));
     } catch (error) {
       console.error(error);
+      alert('An error occurred while liking the video');
     }
   };
 
@@ -47,7 +52,7 @@ function VideoPage() {
       <iframe
         width="800"
         height="450"
-        src={`https://www.youtube.com/embed/${videoId}`}
+        src={`https://www.youtube.com/embed/${videoDetails.youtube_id}`}
         title="YouTube video player"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowFullScreen

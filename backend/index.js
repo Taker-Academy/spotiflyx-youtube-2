@@ -337,16 +337,17 @@ server.post('/videos/upload', async (req, res) => {
         const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
 
         const insertVideoQuery = `
-            INSERT INTO videos (title, description, thumbnail_url, video_url, uploaded_by)
-            VALUES ($1, $2, $3, $4, $5)
+            INSERT INTO videos (title, description, thumbnail_url, video_url, uploaded_by, youtube_id)
+            VALUES ($1, $2, $3, $4, $5, $6)
             RETURNING *
         `;
         const insertVideoValues = [
-            title, // Use the provided title
+            title,
             videoDetails.description,
             thumbnailUrl,
             `https://www.youtube.com/watch?v=${videoId}`,
-            user.username
+            user.username,
+            videoId
         ];
         const insertVideoResult = await pool.query(insertVideoQuery, insertVideoValues);
 
