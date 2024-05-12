@@ -141,6 +141,8 @@ nav .button {
 .size_mini {
     margin-top: 20px;
     border-radius: 20px;
+    height: auto;
+    width: 50%;
 }
 
 .button_pass_home {
@@ -211,6 +213,6 @@ background-color: white
     }
 
     .size_mini_title {
-        font-size: 0.7rem;
+        font-size: 0.6rem;
     }
 }

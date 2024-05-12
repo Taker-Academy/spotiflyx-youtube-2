@@ -77,7 +77,7 @@ function App() {
                     <div key={video.id}>
                       <h2 className='size_mini_title'>{video.title}</h2>
                       {video.thumbnail_url ? (
-                        <img className='size_mini' src={video.thumbnail_url} alt="Miniature" style={{ width: '300px', height: 'auto' }} />
+                        <img className='size_mini' src={video.thumbnail_url} alt="Miniature" />
                       ) : (
                         <p>Thumbnail not available</p>
                       )}
