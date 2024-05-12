@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios'; 
 import '../css/home.css';
 import '../css/menu_home.css';
 
@@ -9,9 +10,11 @@ function App() {
   const [menuVisible, setMenuVisible] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [userData, setUserData] = useState(null); // Ajout du state pour userData
 
   useEffect(() => {
     fetchVideos();
+    fetchData();
   }, []);
 
   const fetchVideos = async () => {
@@ -26,6 +29,18 @@ function App() {
     } catch (error) {
       setError(error.message);
       setLoading(false);
+    }
+  };
+
+  const fetchData = async () => {
+    const email = localStorage.getItem('email');
+    if (email) {
+      try {
+        const response = await axios.get(`http://localhost:8080/user/setting?email=${email}`);
+        setUserData(response.data.data); // Définition de userData
+      } catch (error) {
+        setError(error.response ? error.response.data.message : error.message); // Gestion de l'erreur Axios
+      }
     }
   };
 
@@ -53,9 +68,10 @@ function App() {
         <div className={`menu ${menuVisible ? 'visible' : ''}`}>
           <div className="wrapper">
             <nav id="sidebar">
-              <div className="title">Side Menu</div>
+              <div className="title">{userData ? userData.username : ''}</div>
               <ul className="list-items">
-                <li><Link to="/"><i className="fas fa-home"></i> Home</Link></li>
+                <li><Link to="/home"><i className="fas fa-home"></i> Accueil</Link></li>
+                <li><Link to="/videos/upload"><i className="fas fa-video"></i> Mettre une video</Link></li>
                 <li><Link to="/user/setting"><i className="fas fa-cog"></i> Parametres</Link></li>
                 <li><Link to="/about"><i className="fas fa-user"></i> A propos</Link></li>
                 <li><Link to="/contact"><i className="fas fa-envelope"></i> Contactez nous</Link></li>
@@ -66,9 +82,7 @@ function App() {
       </header>
       <div>
         <div className='conteneur_home '>
-          {loading && <p>Loading...</p>}
-          {error && <p>Error: {error}</p>}
-          {!loading && !error && (
+          {loading ? <p>Loading...</p> : error ? <p>Error: {error}</p> : (
             <>
               <h1 className='list_video'>Liste des vidéos</h1>
               <div className='fond_container'>
@@ -83,7 +97,7 @@ function App() {
                       )}
                       <p className='utilisateur_vidéo'>Mis en ligne par {video.uploaded_by}</p>
                       <Link to={`/videos/${video.id}`} className='title_reg button_pass_home'>Regarder</Link>
-                      <div class="ligne-grise"></div>
+                      <div className="ligne-grise"></div> {/* Utilisation de className */}
                     </div>
                   ))}
                 </div>

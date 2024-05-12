@@ -1,0 +1,88 @@
+.conteneur_upload {
+    display: flex;
+    padding: -5% 0;
+    flex-direction: column;
+    align-items: center;
+}
+
+.fond_video {
+    background: linear-gradient(to right, #f29263, #ee5a6f);
+    margin-left: 10px;
+    height: 45em;
+    min-height: 30%;
+    display: flex;
+    width: 80%;
+    padding-top: 20px;
+    flex-direction: column;
+    align-items: center;
+    padding-left: 10px;
+    border-radius: 20px;
+    margin-bottom: 5%;
+}
+
+.text_upload {
+    font-size: 50px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.nav_video {
+    background-color: hsl(252, 30%, 95%);
+    border-radius: 2rem;
+    padding: 0.6rem 1rem;
+    font-size: 1em;
+    margin-bottom: 1em;
+}
+
+.nav_button_video {
+    background-color: hsl(252, 30%, 95%);
+    border-radius: 2rem;
+    padding: 0.6rem 1rem;
+    font-size: 1em;
+    margin-bottom: 1em;
+}
+
+.button_pass_video button{
+    background: transparent;
+    color: white;
+}
+
+.button_pass_video {
+    background-color: white;
+    color: #12b52d;
+}
+
+.title_reg_video {
+    display: inline-block;
+    font-size: 1.1em;
+    padding: 1rem 2rem;
+    color: white;
+}
+
+.title-reg_video {
+    display: inline-block;
+    padding: 0.6rem 1rem;
+    background-color: black;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.title-reg_video:hover {
+    background-color: white
+}
+
+.message {
+    font-size: 16px;
+    color: #fff;
+    background-color: #12d332;
+    padding: 10px;
+    border-radius: 15px;
+    font-size: 1em;
+    font-weight: bold;
+    display: none; /* Par défaut, le message est caché */
+}
+
+.message.visible {
+    display: block; /* Le message devient visible lorsque la classe 'visible' est ajoutée */
+}

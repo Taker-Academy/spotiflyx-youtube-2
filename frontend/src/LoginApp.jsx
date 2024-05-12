@@ -73,7 +73,7 @@ function LoginPage() {
         </div>
         <div className="login-container">
           <form onSubmit={handleSubmit}>
-            <img src="../images/undraw_pic_profile_re_7g2h.svg" className="avatar" alt="Avatar" />
+            <p to="/" className="title_login">Spotiflyx</p>
             <h2>Se connecter</h2>
             {error && <p style={{ color: 'red' }}>{error}</p>}
             <div className="input-div one">

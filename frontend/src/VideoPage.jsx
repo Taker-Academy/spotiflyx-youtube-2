@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom'; // Import de Link pour les liens internes
+import axios from 'axios'; // Importation d'Axios
 import '../css/home.css';
 import '../css/menu_home.css';
 import '../css/video_page.css';
@@ -8,6 +9,7 @@ function VideoPage() {
   const { videoId } = useParams();
   const [videoDetails, setVideoDetails] = useState(null);
   const [menuVisible, setMenuVisible] = useState(false);
+  const [userData, setUserData] = useState(null); // Déclaration du state userData
 
   useEffect(() => {
     const fetchVideoDetails = async () => {
@@ -23,8 +25,23 @@ function VideoPage() {
         // Gérer l'erreur de récupération des détails de la vidéo ici
       }
     };
+
+    const fetchData = async () => {
+      const email = localStorage.getItem('email');
+      if (email) {
+        try {
+          const response = await axios.get(`http://localhost:8080/user/setting?email=${email}`);
+          setUserData(response.data.data); // Définition de userData
+        } catch (error) {
+          setError(error.response ? error.response.data.message : error.message); // Gestion de l'erreur Axios
+        }
+      }
+    };
+
     fetchVideoDetails();
+    fetchData(); // Appel à fetchData pour récupérer les données utilisateur
   }, [videoId]);
+
 
   const toggleMenu = () => {
     setMenuVisible(!menuVisible);
@@ -64,7 +81,7 @@ function VideoPage() {
         <nav>
           <div className="app-container">
             <div className="container">
-              <Link to="/" className="title">Spotiflyx</Link> {/* Utilisation de Link pour les liens internes */}
+              <Link to="/" className="title">Spotiflyx</Link>
               <div className="search-bar">
                 <i className="fas fa-search"></i>
                 <input type="search" placeholder="Rechercher" />
@@ -78,9 +95,10 @@ function VideoPage() {
         <div className={`menu ${menuVisible ? 'visible' : ''}`}>
           <div className="wrapper">
             <nav id="sidebar">
-              <div className="title">Side Menu</div>
+              <div className="title">{userData ? userData.username : ''}</div>
               <ul className="list-items">
-                <li><Link to="/home"><i className="fas fa-home"></i>Home</Link></li>
+                <li><Link to="/home"><i className="fas fa-home"></i> Accueil</Link></li>
+                <li><Link to="/videos/upload"><i className="fas fa-video"></i> Mettre une video</Link></li>
                 <li><Link to="/user/setting"><i className="fas fa-cog"></i>Paramètres</Link></li>
                 <li><Link to="#"><i className="fas fa-user"></i>A propos</Link></li>
                 <li><Link to="#"><i className="fas fa-envelope"></i>Contactez nous</Link></li>
@@ -89,7 +107,7 @@ function VideoPage() {
           </div>
         </div>
       </header>
-      <body>
+      <div> {/* Remplacez <body> par <div> */}
         <div className="conteneur">
           <div className='fond_page'>
             <h2 className='title_video'>{videoDetails.title}</h2>
@@ -117,8 +135,8 @@ function VideoPage() {
                 <button>
                   <i className="fa-regular fa-bookmark"></i>
                 </button>
-              <br />
               </div>
+              <br /> {/* Ajoutez une balise <br /> manquante */}
               <div className='buton_video'>
                 <button>
                   <i className="fa-solid fa-bookmark"></i>
@@ -128,7 +146,7 @@ function VideoPage() {
             </div>
           </div>
         </div>
-      </body>
+      </div>
     </div>
   );
 }

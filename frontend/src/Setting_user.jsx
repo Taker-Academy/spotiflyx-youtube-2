@@ -76,9 +76,10 @@ function SettingUser() {
         <div className={`menu ${menuVisible ? 'visible' : ''}`}>
           <div className="wrapper">
             <nav id="sidebar">
-              <div className="title">Side Menu</div>
+              <div className="title">{userData ? userData.username : ''}</div>
               <ul className="list-items">
                 <li><a href="/home"><i className="fas fa-home"></i>Home</a></li>
+                <li><a href="/videos/upload"><i className="fas fa-video"></i>Mettre une video</a></li>
                 <li><a href="/user/setting"><i className="fas fa-cog"></i>Paramètres</a></li>
                 <li><a href="#"><i className="fas fa-user"></i>A propos</a></li>
                 <li><a href="#"><i className="fas fa-envelope"></i>Contactez nous</a></li>
