@@ -434,30 +434,29 @@ server.post('/videos/like/:id', async (req, res) => {
     }
 });
 
-// server.post('/videos/favorite/:id', async (req, res) => {
-//     try {
-//         const videoId = req.params.id;
-//         const selectVideoQuery = 'SELECT * FROM videos WHERE id = $1';
-//         const videoResult = await pool.query(selectVideoQuery, [videoId]);
-//         const selectLikesCountQuery = 'SELECT likes FROM videos WHERE id = $1';
+server.get('/spotify/token', async (req, res) => {
+    try {
+        const token = await _getToken();
+        res.status(200).json({ ok: true, token });
+    } catch (error) {
+        console.error('Erreur lors de la récupération du jeton Spotify:', error);
+        res.status(500).json({ ok: false, message: 'Erreur lors de la récupération du jeton Spotify' });
+    }
+});
 
-//         if (videoResult.rows.length === 0) {
-//             return res.status(404).json({ ok: false, message: 'Vidéo introuvable' });
-//         }
-//         // Incrémente le nombre de likes pour la vidéo
-//         const incrementLikesQuery = 'UPDATE videos SET likes = likes + 1 WHERE id = $1';
-//         await pool.query(incrementLikesQuery, [videoId]);
+const _getToken = async () => {
+    const result = await fetch('https://accounts.spotify.com/api/token', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Authorization': 'Basic ' + Buffer.from(process.env.CLIENT_ID + ':' + process.env.CLIENT_SECRET).toString('base64')
+        },
+        body: 'grant_type=client_credentials'
+    });
 
-//         // Récupère le nouveau nombre de likes pour la vidéo
-//         const updatedVideoResult = await pool.query(selectVideoQuery, [videoId]);
-//         const newLikesCount = updatedVideoResult.rows[0].likes;
-
-//         res.status(200).json({ ok: true, likes: newLikesCount });
-//     } catch (error) {
-//         console.error(error);
-//         res.status(500).json({ ok: false, message: `Erreur lors de l'ajout du favoris` });
-//     }
-// });
+    const data = await result.json();
+    return data.access_token;
+};
 
 server.listen(PORT, function() {
     console.log(`working on http://localhost:${PORT}`)

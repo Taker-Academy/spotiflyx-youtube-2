@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+// import Spotify from 'spotify-web-playback-sdk';
 
 function VideoUploader() {
     const [videoName, setVideoName] = useState('');
@@ -6,6 +7,7 @@ function VideoUploader() {
     const [message, setMessage] = useState('');
     const [isVideoChecked, setIsVideoChecked] = useState(false);
     const [isMusicChecked, setIsMusicChecked] = useState(false);
+    const [spotifyLink, setSpotifyLink] = useState('');
 
     const handleUpload = async () => {
         if (isVideoChecked){
@@ -32,9 +34,52 @@ function VideoUploader() {
                 console.error(error);
             }
         } else if (isMusicChecked){
-            console.log("SALUT");
+            playSpotifyMusic(videoLink);
         } else{
             setMessage("Veuillez sélectionner une Vidéo ou Musique.");
+        }
+    };
+
+    const playSpotifyMusic = async (link) => {
+        try {
+            // Faites une requête GET pour récupérer le jeton d'accès depuis votre backend
+            const response = await fetch('http://localhost:8080/spotify/token');
+            const data = await response.json();
+    
+            if (response.ok) {
+                const token = data.token;
+    
+                // Créez une nouvelle instance du lecteur Spotify Web Playback
+                const player = new Spotify.Player({
+                    name: 'Spotiflyx Player',
+                    getOAuthToken: cb => { cb(token); }
+                });
+    
+                // Connectez le lecteur à l'API Spotify
+                player.connect().then(success => {
+                    if (success) {
+                        console.log('Connecté au lecteur Spotify');
+    
+                        // Chargez la musique à partir du lien Spotify
+                        player
+                            .play({
+                                uris: [link]
+                            })
+                            .then(() => {
+                                console.log('Lecture de la musique depuis Spotify');
+                            })
+                            .catch(error => {
+                                console.error('Impossible de lire la musique:', error);
+                            });
+                    }
+                }).catch(error => {
+                    console.error('Impossible de se connecter au lecteur Spotify:', error);
+                });
+            } else {
+                console.error('Erreur lors de la récupération du jeton Spotify:', data.message);
+            }
+        } catch (error) {
+            console.error('Erreur lors de la récupération du jeton Spotify:', error);
         }
     };
 
