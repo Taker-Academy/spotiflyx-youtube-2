@@ -82,9 +82,7 @@ function App() {
                         <p>Thumbnail not available</p>
                       )}
                       <p className='utilisateur_vidéo'>Mis en ligne par {video.uploaded_by}</p>
-                      <div class='button_pass_home'>
-                        <Link to={`/videos/${video.id}`} className='title_reg'>Regarder</Link>
-                      </div>
+                      <Link to={`/videos/${video.id}`} className='title_reg button_pass_home'>Regarder</Link>
                       <div class="ligne-grise"></div>
                     </div>
                   ))}
