@@ -62,7 +62,7 @@ function SettingUser() {
         <nav>
           <div className="app-container">
             <div className="container">
-              <a href="javascript:void(0)" className="title">Spotiflyx</a>
+              <a href="/home" className="title">Spotiflyx</a>
               <div className="search-bar">
                 <i className="fas fa-search"></i>
                 <input type="search" placeholder="Rechercher" />

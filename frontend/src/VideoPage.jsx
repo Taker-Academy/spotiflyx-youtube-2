@@ -81,7 +81,7 @@ function VideoPage() {
         <nav>
           <div className="app-container">
             <div className="container">
-              <Link to="/" className="title">Spotiflyx</Link>
+              <Link to="/home" className="title">Spotiflyx</Link>
               <div className="search-bar">
                 <i className="fas fa-search"></i>
                 <input type="search" placeholder="Rechercher" />

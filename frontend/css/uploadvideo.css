@@ -86,3 +86,53 @@
 .message.visible {
     display: block; /* Le message devient visible lorsque la classe 'visible' est ajoutée */
 }
+
+.checkbox-container {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 10px;
+}
+
+.checkbox-input {
+    display: none;
+}
+
+.checkbox-custom {
+    position: relative;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    background-color: #eee;
+    border: 2px solid #ccc;
+    border-radius: 3px;
+}
+
+.checkbox-custom::after {
+    content: "";
+    position: absolute;
+    display: none;
+    left: 6px;
+    top: 2px;
+    width: 6px;
+    height: 12px;
+    border: solid #555;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.checkbox-input:checked + .checkbox-custom::after {
+    display: block;
+}
+
+/* Styles for the labels */
+.checkbox-label {
+    display: inline-block;
+    vertical-align: middle;
+    background-color: rgb(206, 206, 206);
+    margin-bottom: 10px;
+    border-radius: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    padding: 10px;
+}
