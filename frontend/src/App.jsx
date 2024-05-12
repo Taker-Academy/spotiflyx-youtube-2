@@ -6,22 +6,28 @@ import '../css/menu_home.css';
 function App() {
 
   const [videos, setVideos] = useState([]);
-  const [selectedVideoId, setSelectedVideoId] = useState(null);
+  const [menuVisible, setMenuVisible] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-      fetchVideos();
+    fetchVideos();
   }, []);
-  const fetchVideos = async () => {
-      try {
-          const response = await fetch('http://localhost:8080/videos');
-          const data = await response.json();
-          setVideos(data.videos);
-      } catch (error) {
-          console.error(error);
-      }
-  };
 
-  const [menuVisible, setMenuVisible] = useState(false);
+  const fetchVideos = async () => {
+    try {
+      const response = await fetch('http://localhost:8080/videos');
+      if (!response.ok) {
+        throw new Error('Failed to fetch videos');
+      }
+      const data = await response.json();
+      setVideos(data.videos);
+      setLoading(false);
+    } catch (error) {
+      setError(error.message);
+      setLoading(false);
+    }
+  };
 
   const toggleMenu = () => {
     setMenuVisible(!menuVisible);
@@ -33,7 +39,7 @@ function App() {
         <nav>
           <div className="app-container">
             <div className="container">
-              <a href="#" className="title">Spotiflyx</a>
+              <Link to="/" className="title">Spotiflyx</Link>
               <div className="search-bar">
                 <i className="fas fa-search"></i>
                 <input type="search" placeholder="Rechercher" />
@@ -44,33 +50,50 @@ function App() {
             </div>
           </div>
         </nav>
-        <div>
-            <h1>Liste des vidéos</h1>
-            <div>
-            {videos.map(video => (
-              <div key={video.id}>
-                <h2>{video.title}</h2>
-                <img src={video.thumbnail_url} alt="Miniature" style={{ width: '300px', height: 'auto' }} />
-                <p>{video.uploaded_by}</p>
-                <Link to={`/videos/${video.id}`}>Regarder</Link>  
-              </div>
-            ))}
-            </div>
-        </div>
         <div className={`menu ${menuVisible ? 'visible' : ''}`}>
           <div className="wrapper">
             <nav id="sidebar">
               <div className="title">Side Menu</div>
               <ul className="list-items">
-                  <li><a href="#"><i className="fas fa-home">Home</i></a></li>
-                  <li><a href="/user/setting"><i className="fas fa-cog">Parametres</i></a></li>
-                  <li><a href="#"><i className="fas fa-user">A propos</i></a></li>
-                  <li><a href="#"><i className="fas fa-envelope">Contactez nous</i></a></li>
+                <li><Link to="/"><i className="fas fa-home"></i> Home</Link></li>
+                <li><Link to="/user/setting"><i className="fas fa-cog"></i> Parametres</Link></li>
+                <li><Link to="/about"><i className="fas fa-user"></i> A propos</Link></li>
+                <li><Link to="/contact"><i className="fas fa-envelope"></i> Contactez nous</Link></li>
               </ul>
             </nav>
           </div>
         </div>
       </header>
+      <div>
+        <div className='conteneur_home '>
+          {loading && <p>Loading...</p>}
+          {error && <p>Error: {error}</p>}
+          {!loading && !error && (
+            <>
+              <h1 className='list_video'>Liste des vidéos</h1>
+              <div className='fond_container'>
+                <div>
+                  {videos.map(video => (
+                    <div key={video.id}>
+                      <h2 className='size_mini_title'>{video.title}</h2>
+                      {video.thumbnail_url ? (
+                        <img className='size_mini' src={video.thumbnail_url} alt="Miniature" style={{ width: '300px', height: 'auto' }} />
+                      ) : (
+                        <p>Thumbnail not available</p>
+                      )}
+                      <p className='utilisateur_vidéo'>Mis en ligne par {video.uploaded_by}</p>
+                      <div class='button_pass_home'>
+                        <Link to={`/videos/${video.id}`} className='title_reg'>Regarder</Link>
+                      </div>
+                      <div class="ligne-grise"></div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

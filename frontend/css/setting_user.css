@@ -1,6 +1,14 @@
-body {
+body_home {
     background-color: #f9f9fa
 }
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: hsl(252, 30%, 95%);
+    color: hsl(252, 30%, 17%);
+    overflow: hidden;
+}
+
 
 .padding {
     padding: 3rem !important

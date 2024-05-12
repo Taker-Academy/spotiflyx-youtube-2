@@ -1,0 +1,53 @@
+body {
+    overflow-y: auto;
+}
+
+.conteneur {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 91.5vh;
+    padding: -5% 0;
+    background: linear-gradient(to right, #f29263, #ee5a6f);
+}
+
+.fond_page {
+    background-color: hsl(252, 30%, 95%);
+    height: 80%;
+    display: flex;
+    width: 80%;
+    align-items: center;
+    flex-direction: column;
+    border-radius: 20px;
+    margin-bottom: 5%;
+}
+
+.title_video {
+    font-size: 200%;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    text-align: center;
+}
+
+
+.size_video {
+    width: 80%;
+    border-radius: 20px;
+    height: 80%;
+}
+
+.button_video {
+    display: flex;
+    flex-direction: row;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    gap: 15px;
+}
+
+.buton_video button {
+    background: linear-gradient(to right, #f29263, #ee5a6f);
+    color: white;
+    border-radius: 15px;
+    padding: 15px;
+    font-size: 20px;
+}
