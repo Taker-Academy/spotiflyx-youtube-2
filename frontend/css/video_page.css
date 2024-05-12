@@ -23,7 +23,10 @@ body {
 }
 
 .title_video {
-    font-size: 200%;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    font-size: 2.3vw;
     margin-bottom: 20px;
     margin-top: 20px;
     text-align: center;
@@ -36,13 +39,22 @@ body {
     height: 80%;
 }
 
+.espace_video {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    gap: 10px;
+}
+
 .button_video {
     display: flex;
     flex-direction: row;
     margin-top: 20px;
     margin-bottom: 20px;
-    gap: 15px;
 }
+
 
 .buton_video button {
     background: linear-gradient(to right, #f29263, #ee5a6f);

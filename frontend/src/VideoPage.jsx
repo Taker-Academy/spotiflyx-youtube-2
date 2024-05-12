@@ -99,7 +99,7 @@ function VideoPage() {
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
             ></iframe>
-            <div className='button_video'>
+            <div className='espace_video'>
               <br />
               <div className='buton_video'>
                 <button onClick={handleLike}>
