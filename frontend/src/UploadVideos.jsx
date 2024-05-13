@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+// import { SpotifyPlayer } from '@spotify/web-playback-sdk';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import '../css/uploadvideo.css';
@@ -12,6 +13,10 @@ function VideoUploader() {
     const [menuVisible, setMenuVisible] = useState(false);
     const [userData, setUserData] = useState(null);
     const [error, setError] = useState('');
+    const [accessToken, setAccessToken] = useState("");
+
+    const CLIENT_ID = "2c33fc0b6fd745db9739b6497783bd4d";
+    const CLIENT_SECRET = "252a9d1b99194e2485e2fe7da068ed26"
 
     useEffect(() => {
         const fetchData = async () => {
@@ -65,8 +70,71 @@ function VideoUploader() {
     };
 
     const playSpotifyMusic = async (link) => {
-        // Implémentez la fonction de lecture de la musique Spotify si nécessaire
+        const trackId = extractTrackIdFromLink(link);
+
+        if (!trackId) {
+          setMessage('Lien Spotify invalide');
+          return;
+        }   
+        // Fetch access token
+        try {
+          const response = await fetch('https://accounts.spotify.com/api/token', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: `grant_type=client_credentials&client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}`
+          });
+          const data = await response.json();
+          setAccessToken(data.access_token);
+        } catch (error) {
+          console.error('Error fetching access token:', error);
+          setMessage('Une erreur s\'est produite lors de la récupération du jeton d\'accès');
+          return;
+        }   
+        // Initialize Spotify Player
+        const player = new SpotifyPlayer({
+          name: 'My Spotify Player',
+          getOAuthToken: (cb) => cb(accessToken),
+          volume: 0.5
+        }); 
+        // Connect player
+        player.connect().then((success) => {
+          if (success) {
+            console.log('The Web Playback SDK successfully connected to Spotify!');
+            setPlayer(player);
+          }
+        }).catch((error) => {
+          console.error('Error connecting player:', error);
+          setMessage('Une erreur s\'est produite lors de la connexion au lecteur Spotify');
+        });
     };
+
+    const extractTrackIdFromLink = (link) => {
+        const parts = link.split('/');
+        return parts[parts.length - 1];
+    };
+
+    const handlePlayMusic = () => {
+        if (!player) {
+          setMessage('Lecteur Spotify non initialisé');
+          return;
+        }
+      
+        const trackId = extractTrackIdFromLink(videoLink);
+        if (!trackId) {
+          setMessage('Lien Spotify invalide');
+          return;
+        }
+      
+        // Play track
+        player.playUri(`spotify:track:${trackId}`).then(() => {
+          console.log('Playback started');
+        }).catch((error) => {
+          console.error('Error playing track:', error);
+          setMessage('Une erreur s\'est produite lors de la lecture de la musique');
+        });
+      };
 
     return (
         <div>
@@ -118,6 +186,7 @@ function VideoUploader() {
                         <span>Musique</span>
                     </label>
                     <button className='title_reg button_pass_home' onClick={handleUpload}>Envoyer</button>
+                    <button className='title_reg button_pass_home' onClick={handlePlayMusic}>Lire la musique</button>
                     <p>{message}</p>
                 </div>
             </div>

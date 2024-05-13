@@ -50,7 +50,7 @@ function LoginPage() {
       }
       const { token, user } = await response.json();
       localStorage.setItem('token', token);
-      localStorage.setItem('email', email); // Stocker l'e-mail uniquement en cas de connexion réussie
+      localStorage.setItem('email', email);
       window.location.href = '/home';
     } catch (error) {
       setError(error.message);

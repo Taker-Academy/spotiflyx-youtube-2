@@ -16,7 +16,8 @@
       "pg": "^8.4.0",
       "react-router-dom": "^6.23.0",
       "reflect-metadata": "^0.1.13",
-      "typeorm": "0.3.20"
+      "typeorm": "0.3.20",
+      "use-spotify-web-playback-sdk": "^0.2.2"
    },
    "scripts": {
       "start": "ts-node src/index.ts",
