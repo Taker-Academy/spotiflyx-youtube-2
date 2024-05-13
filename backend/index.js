@@ -410,29 +410,55 @@ server.get('/videos/:id', async (req, res) => {
 });
 
 server.post('/videos/like/:id', async (req, res) => {
+    const { email } = req.body;
+    const client = await pool.connect();
     try {
-        const videoId = req.params.id;
-        const selectVideoQuery = 'SELECT * FROM videos WHERE id = $1';
-        const videoResult = await pool.query(selectVideoQuery, [videoId]);
-        const selectLikesCountQuery = 'SELECT likes FROM videos WHERE id = $1';
+      const { id } = req.params;
+      const { userId } = req.body;
 
-        if (videoResult.rows.length === 0) {
-            return res.status(404).json({ ok: false, message: 'Vidéo introuvable' });
+        const userQuery = 'SELECT * FROM userss WHERE email = $1';
+        const userResult = await pool.query(userQuery, [email]);
+
+        if (userResult.rows.length === 0) {
+            return res.status(401).json({ ok: false, message: 'Adresse e-mail ou mot de passe incorrect' });
         }
-        // Incrémente le nombre de likes pour la vidéo
-        const incrementLikesQuery = 'UPDATE videos SET likes = likes + 1 WHERE id = $1';
-        await pool.query(incrementLikesQuery, [videoId]);
 
-        // Récupère le nouveau nombre de likes pour la vidéo
-        const updatedVideoResult = await pool.query(selectVideoQuery, [videoId]);
-        const newLikesCount = updatedVideoResult.rows[0].likes;
+        const user = userResult.rows[0];
 
+        console.log(user);
+  
+      // Validation
+      if (!userId || !id) {
+        return res.status(400).json({ ok: false, message: 'Identifiants de vidéo ou d\'utilisateur manquants' });
+      }
+  
+      await client.query('BEGIN');
+  
+      const selectLikeQuery = 'SELECT 1 FROM videos WHERE id = $1 AND $2 = ANY (likes)';
+      const likeResult = await client.query(selectLikeQuery, [id, userId]);
+  
+      if (likeResult.rows.length > 0) {
+        await client.query('UPDATE videos SET likes = likes - 1 WHERE id = $1', [id]);
+        const newLikesCount = (await client.query('SELECT likes FROM videos WHERE id = $1', [id])).rows[0].likes;
         res.status(200).json({ ok: true, likes: newLikesCount });
+      } else {
+        // User has not liked the video, add the like
+        await client.query('UPDATE videos SET likes = likes + 1 WHERE id = $1', [id]);
+        await client.query('UPDATE videos SET likes = likes + 1 WHERE id = $1 RETURNING likes', [id]);
+        const newLikesCount = (await client.query('SELECT likes FROM videos WHERE id = $1', [id])).rows[0].likes;
+        res.status(200).json({ ok: true, likes: newLikesCount });
+      }
+  
+      await client.query('COMMIT');
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ ok: false, message: `Erreur lors de l'incrémentation du nombre de likes` });
+      await client.query('ROLLBACK');
+      console.error(error);
+      res.status(500).json({ ok: false, message: 'Erreur lors de l\'incrémentation du nombre de likes' });
+    } finally {
+      client.release();
     }
 });
+  
 
 server.get('/spotify/token', async (req, res) => {
     try {
