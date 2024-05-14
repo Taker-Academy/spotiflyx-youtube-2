@@ -494,6 +494,30 @@ server.post('/videos/favorite/:id', async (req, res) => {
     }
 });
 
+server.get('/user/favorites', async (req, res) => {
+    const { email } = req.query;
+
+    try {
+        const userQuery = 'SELECT id FROM userss WHERE email = $1';
+        const userResult = await pool.query(userQuery, [email]);
+
+        if (userResult.rows.length === 0) {
+            return res.status(401).json({ ok: false, message: 'Adresse e-mail ou mot de passe incorrect' });
+        }
+
+        const userId = userResult.rows[0].id;
+
+        // Get the user's favorite videos from the user_favorites table
+        const favoritesQuery = 'SELECT videos.* FROM videos JOIN user_favorites ON videos.id = user_favorites.video_id WHERE user_favorites.user_id = $1';
+        const favoritesResult = await pool.query(favoritesQuery, [userId]);
+
+        res.status(200).json({ ok: true, videos: favoritesResult.rows });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ ok: false, message: 'Erreur lors de la récupération des vidéos favorites' });
+    }
+});
+
 server.listen(PORT, function() {
     console.log(`working on http://localhost:${PORT}`)
 });

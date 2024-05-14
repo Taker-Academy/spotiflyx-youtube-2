@@ -138,6 +138,7 @@ function VideoUploader() {
 
     return (
         <div>
+            <title>Publier - Spotiflyx</title>
             <header>
                 <nav>
                     <div className="app-container">

@@ -29,7 +29,7 @@ const CustomRoutes = () => {
       <Route path="/home" element={<PrivateRoute element={<App />} />} />
       <Route path="/videos/upload" element={<PrivateRoute element={<UploadVideos />} />} />
       <Route path="/videos/:videoId" element={<VideoPage />} />
-      <Route path="/videos/favorite" element={<UserFavorite />} />
+      <Route path="/user/favorite" element={<UserFavorite />} />
     </Routes>
   );
 };

@@ -10,7 +10,7 @@ function App() {
   const [menuVisible, setMenuVisible] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [userData, setUserData] = useState(null); // Ajout du state pour userData
+  const [userData, setUserData] = useState(null);
 
   useEffect(() => {
     fetchVideos();
@@ -50,6 +50,7 @@ function App() {
 
   return (
     <div>
+      <title>Accueil - Spotiflyx</title>
       <header>
         <nav>
           <div className="app-container">

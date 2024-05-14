@@ -59,6 +59,7 @@ function SettingUser() {
 
   return (
     <div>
+      <title>Mon compte - Spotiflyx</title>
       <header>
         <nav>
           <div className="app-container">

@@ -81,12 +81,12 @@ function VideoPage() {
             email: localStorage.getItem('email')
         });
 
-        if (!response.ok) {
-            throw new Error('Failed to add video to favorites');
-        }
+        // if (!response.ok) {
+        //     throw new Error('Failed to add video to favorites');
+        // }
 
         // Handle success, maybe update UI accordingly
-        alert('Vidéo ajoutée aux favoris avec succès');
+        // alert('Vidéo ajoutée aux favoris avec succès');
     } catch (error) {
         console.error(error);
         alert('Une erreur est survenue lors de l\'ajout de la vidéo aux favoris');
