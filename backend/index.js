@@ -10,9 +10,14 @@ const nodemailer = require('nodemailer');
 const fs = require('fs');
 const { google } = require('googleapis');
 
+require('dotenv').config({
+    override: true,
+    path: path.join(__dirname, '.env')
+});
+
 const youtube = google.youtube({
     version: 'v3',
-    auth: 'AIzaSyDKmLO7lPCyJLKxZK8ulB0V6nBo-nl0hbw'
+    auth: process.env.YOUTUBE_API_KEY
 });
 
 //Emails
@@ -26,13 +31,8 @@ const transporter = nodemailer.createTransport({
   secure: false,
   auth: {
     user: "spotiflyx.taker@gmail.com",
-    pass: "jorg smvj laod lvha",
+    pass: process.env.NODEMAILER_PASSWORD
   },
-});
-
-require('dotenv').config({
-    override: true,
-    path: path.join(__dirname, '.env')
 });
 
 const pool = new Pool({
