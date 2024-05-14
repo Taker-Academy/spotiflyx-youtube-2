@@ -72,9 +72,10 @@ function App() {
               <ul className="list-items">
                 <li><Link to="/home"><i className="fas fa-home"></i> Accueil</Link></li>
                 <li><Link to="/videos/upload"><i className="fas fa-video"></i> Mettre une video</Link></li>
-                <li><Link to="/user/setting"><i className="fas fa-cog"></i> Parametres</Link></li>
-                <li><Link to="/about"><i className="fas fa-user"></i> A propos</Link></li>
-                <li><Link to="/contact"><i className="fas fa-envelope"></i> Contactez nous</Link></li>
+                <li><Link to="/user/setting"><i className="fas fa-cog"></i>Mon compte</Link></li>
+                <li><Link to="/user/favorite"><i className="fa-solid fa-bookmark"></i>Mes favoris</Link></li>
+                <li><Link to="#"><i className="fas fa-user"></i>A propos</Link></li>
+                <li><Link to="/contact"><i className="fas fa-envelope"></i>Contactez nous</Link></li>
               </ul>
             </nav>
           </div>

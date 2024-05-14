@@ -271,22 +271,9 @@ server.get('/user/setting', async (req, res) => {
         res.status(500).json({ ok: false, message: 'Erreur lors de la récupération des informations utilisateur' });
     }
 });
-const multer = require('multer');
-
-// Configuration de Multer pour le téléchargement de fichiers
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, 'uploads/');
-    },
-    filename: function (req, file, cb) {
-        cb(null, file.originalname);
-    }
-});
-
-const upload = multer({ storage: storage });
 
 // Endpoint pour enregistrer l'image de profil de l'utilisateur
-server.post('/user/profilePicture', upload.single('file'), async (req, res) => {
+server.post('/user/profilePicture', async (req, res) => {
     const { email } = req.body;
     try {
         // Mettre à jour le chemin de l'image dans la base de données pour l'utilisateur correspondant à l'email
@@ -458,7 +445,6 @@ server.post('/videos/like/:id', async (req, res) => {
       client.release();
     }
 });
-  
 
 server.get('/spotify/token', async (req, res) => {
     try {
@@ -483,6 +469,30 @@ const _getToken = async () => {
     const data = await result.json();
     return data.access_token;
 };
+
+server.post('/videos/favorite/:id', async (req, res) => {
+    const { email } = req.body;
+    const { id } = req.params;
+
+    try {
+        const userQuery = 'SELECT id FROM userss WHERE email = $1';
+        const userResult = await pool.query(userQuery, [email]);
+
+        if (userResult.rows.length === 0) {
+            return res.status(401).json({ ok: false, message: 'Adresse e-mail ou mot de passe incorrect' });
+        }
+
+        const userId = userResult.rows[0].id;
+
+        // Insert the video into user_favorites table
+        await pool.query('INSERT INTO user_favorites (user_id, video_id) VALUES ($1, $2)', [userId, id]);
+
+        res.status(200).json({ ok: true, message: 'Vidéo ajoutée aux favoris avec succès' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ ok: false, message: 'Erreur lors de l\'ajout de la vidéo aux favoris' });
+    }
+});
 
 server.listen(PORT, function() {
     console.log(`working on http://localhost:${PORT}`)

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 import '../css/setting_user.css';
 import '../css/home.css';
 import '../css/menu_home.css';
@@ -78,11 +79,12 @@ function SettingUser() {
             <nav id="sidebar">
               <div className="title">{userData ? userData.username : ''}</div>
               <ul className="list-items">
-                <li><a href="/home"><i className="fas fa-home"></i>Home</a></li>
-                <li><a href="/videos/upload"><i className="fas fa-video"></i>Mettre une video</a></li>
-                <li><a href="/user/setting"><i className="fas fa-cog"></i>Paramètres</a></li>
-                <li><a href="#"><i className="fas fa-user"></i>A propos</a></li>
-                <li><a href="#"><i className="fas fa-envelope"></i>Contactez nous</a></li>
+                <li><Link to="/home"><i className="fas fa-home"></i> Accueil</Link></li>
+                <li><Link to="/videos/upload"><i className="fas fa-video"></i> Mettre une video</Link></li>
+                <li><Link to="/user/setting"><i className="fas fa-cog"></i>Mon compte</Link></li>
+                <li><Link to="/user/favorite"><i className="fa-solid fa-bookmark"></i>Mes favoris</Link></li>
+                <li><Link to="#"><i className="fas fa-user"></i>A propos</Link></li>
+                <li><Link to="/contact"><i className="fas fa-envelope"></i>Contactez nous</Link></li>
               </ul>
             </nav>
           </div>
@@ -136,7 +138,7 @@ function SettingUser() {
                                 required
                               />
                             </div>
-                            <div class='button_pass'>
+                            <div className='button_pass'>
                               <button type="submit">Changer le mot de passe</button>
                             </div>
                             <h6 className="m-b-20 p-b-5 b-b-default f-w-600">Connection</h6>

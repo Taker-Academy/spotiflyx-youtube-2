@@ -75,8 +75,28 @@ function VideoPage() {
     }
   };
 
+  const handleFavorite = async () => {
+    try {
+        const response = await axios.post(`http://localhost:8080/videos/favorite/${videoId}`, {
+            email: localStorage.getItem('email')
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to add video to favorites');
+        }
+
+        // Handle success, maybe update UI accordingly
+        alert('Vidéo ajoutée aux favoris avec succès');
+    } catch (error) {
+        console.error(error);
+        alert('Une erreur est survenue lors de l\'ajout de la vidéo aux favoris');
+    }
+  };
+
+
   return (
     <div>
+      <title>{videoDetails.title} - Spotiflyx</title>
       <header>
         <nav>
           <div className="app-container">
@@ -99,9 +119,10 @@ function VideoPage() {
               <ul className="list-items">
                 <li><Link to="/home"><i className="fas fa-home"></i> Accueil</Link></li>
                 <li><Link to="/videos/upload"><i className="fas fa-video"></i> Mettre une video</Link></li>
-                <li><Link to="/user/setting"><i className="fas fa-cog"></i>Paramètres</Link></li>
+                <li><Link to="/user/setting"><i className="fas fa-cog"></i>Mon compte</Link></li>
+                <li><Link to="/user/favorite"><i className="fa-solid fa-bookmark"></i>Mes favoris</Link></li>
                 <li><Link to="#"><i className="fas fa-user"></i>A propos</Link></li>
-                <li><Link to="#"><i className="fas fa-envelope"></i>Contactez nous</Link></li>
+                <li><Link to="/contact"><i className="fas fa-envelope"></i>Contactez nous</Link></li>
               </ul>
             </nav>
           </div>
@@ -111,6 +132,7 @@ function VideoPage() {
         <div className="conteneur">
           <div className='fond_page'>
             <h2 className='title_video'>{videoDetails.title}</h2>
+            <h4>{videoDetails.uploaded_by}</h4>
             <iframe className='size_video'
               src={`https://www.youtube.com/embed/${videoDetails.youtube_id}`}
               title="YouTube video player"
@@ -125,24 +147,12 @@ function VideoPage() {
                 </button>
               </div>
               <br />
-              <div className='buton_video'>
-                <button>
-                  <i className="fa-solid fa-thumbs-up"></i>
-                </button>
-              </div>
               <br />
               <div className='buton_video'>
-                <button>
-                  <i className="fa-regular fa-bookmark"></i>
+                <button onClick={handleFavorite}>
+                    <i className="fa-regular fa-bookmark"></i> Ajouter aux favoris
                 </button>
               </div>
-              <br /> {/* Ajoutez une balise <br /> manquante */}
-              <div className='buton_video'>
-                <button>
-                  <i className="fa-solid fa-bookmark"></i>
-                </button>
-              </div>
-              {/* Ajoutez ici d'autres informations sur la vidéo */}
             </div>
           </div>
         </div>

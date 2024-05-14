@@ -1,6 +1,6 @@
 import React from 'react';
 
-function UserPage() {
+function UserFavorite() {
   return (
     <>
       <title>Mon compte</title>
@@ -9,4 +9,4 @@ function UserPage() {
   );
 }
 
-export default UserPage;
+export default UserFavorite;
