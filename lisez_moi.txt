@@ -1,0 +1,2 @@
+Malheureusement, je n'ai pas réussi à intégrer mon backend dans mon Dockerfile.
+Pour l'activer, vous devez exécuter docker compose puis, dans le backend, utiliser la commande npm run start.
