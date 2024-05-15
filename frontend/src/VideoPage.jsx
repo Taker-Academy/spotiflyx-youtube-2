@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom'; // Import de Link pour les liens internes
-import axios from 'axios'; // Importation d'Axios
+import { useParams, Link } from 'react-router-dom';
+import axios from 'axios';
 import '../css/home.css';
 import '../css/menu_home.css';
 import '../css/video_page.css';
@@ -9,7 +9,7 @@ function VideoPage() {
   const { videoId } = useParams();
   const [videoDetails, setVideoDetails] = useState(null);
   const [menuVisible, setMenuVisible] = useState(false);
-  const [userData, setUserData] = useState(null); // Déclaration du state userData
+  const [userData, setUserData] = useState(null);
 
   useEffect(() => {
     const fetchVideoDetails = async () => {
@@ -22,7 +22,6 @@ function VideoPage() {
         setVideoDetails(data.video);
       } catch (error) {
         console.error(error);
-        // Gérer l'erreur de récupération des détails de la vidéo ici
       }
     };
 
@@ -31,15 +30,15 @@ function VideoPage() {
       if (email) {
         try {
           const response = await axios.get(`http://localhost:8080/user/setting?email=${email}`);
-          setUserData(response.data.data); // Définition de userData
+          setUserData(response.data.data);
         } catch (error) {
-          setError(error.response ? error.response.data.message : error.message); // Gestion de l'erreur Axios
+          setError(error.response ? error.response.data.message : error.message);
         }
       }
     };
 
     fetchVideoDetails();
-    fetchData(); // Appel à fetchData pour récupérer les données utilisateur
+    fetchData();
   }, [videoId]);
 
 
@@ -128,7 +127,7 @@ function VideoPage() {
           </div>
         </div>
       </header>
-      <div> {/* Remplacez <body> par <div> */}
+      <div>
         <div className="conteneur">
           <div className='fond_page'>
             <h2 className='title_video'>{videoDetails.title}</h2>

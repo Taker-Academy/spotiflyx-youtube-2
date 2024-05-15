@@ -37,9 +37,9 @@ function App() {
     if (email) {
       try {
         const response = await axios.get(`http://localhost:8080/user/setting?email=${email}`);
-        setUserData(response.data.data); // Définition de userData
+        setUserData(response.data.data);
       } catch (error) {
-        setError(error.response ? error.response.data.message : error.message); // Gestion de l'erreur Axios
+        setError(error.response ? error.response.data.message : error.message);
       }
     }
   };
@@ -99,7 +99,7 @@ function App() {
                       )}
                       <p className='utilisateur_vidéo'>Mis en ligne par {video.uploaded_by}</p>
                       <Link to={`/videos/${video.id}`} className='title_reg button_pass_home'>Regarder</Link>
-                      <div className="ligne-grise"></div> {/* Utilisation de className */}
+                      <div className="ligne-grise"></div>
                     </div>
                   ))}
                 </div>

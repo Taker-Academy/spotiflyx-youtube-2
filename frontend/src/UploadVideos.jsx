@@ -15,9 +15,6 @@ function VideoUploader() {
     const [error, setError] = useState('');
     const [accessToken, setAccessToken] = useState("");
 
-    const CLIENT_ID = "2c33fc0b6fd745db9739b6497783bd4d";
-    const CLIENT_SECRET = "252a9d1b99194e2485e2fe7da068ed26"
-
     useEffect(() => {
         const fetchData = async () => {
             const email = localStorage.getItem('email');
@@ -76,7 +73,6 @@ function VideoUploader() {
           setMessage('Lien Spotify invalide');
           return;
         }   
-        // Fetch access token
         try {
           const response = await fetch('https://accounts.spotify.com/api/token', {
             method: 'POST',
@@ -92,13 +88,11 @@ function VideoUploader() {
           setMessage('Une erreur s\'est produite lors de la récupération du jeton d\'accès');
           return;
         }   
-        // Initialize Spotify Player
         const player = new SpotifyPlayer({
           name: 'My Spotify Player',
           getOAuthToken: (cb) => cb(accessToken),
           volume: 0.5
         }); 
-        // Connect player
         player.connect().then((success) => {
           if (success) {
             console.log('The Web Playback SDK successfully connected to Spotify!');
@@ -127,7 +121,6 @@ function VideoUploader() {
           return;
         }
       
-        // Play track
         player.playUri(`spotify:track:${trackId}`).then(() => {
           console.log('Playback started');
         }).catch((error) => {
