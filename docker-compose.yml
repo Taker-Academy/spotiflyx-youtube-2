@@ -15,6 +15,16 @@ services:
     ports:
       - "5430:5430"
     command: -p 5430
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: pix_frontend
+    ports:
+      - "5173:5173"
+    networks:
+      - overlay
 volumes:
   postgres-db:
 

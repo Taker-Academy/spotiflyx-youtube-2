@@ -8,6 +8,7 @@ import Setting_user from './Setting_user.jsx';
 import UploadVideos from './UploadVideos.jsx';
 import VideoPage from './VideoPage.jsx';
 import UserFavorite from './UserFavorites.jsx';
+import Propos from './Propos.jsx';
 
 const PrivateRoute = ({ element, ...props }) => {
   const email = localStorage.getItem('email');
