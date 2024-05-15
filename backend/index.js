@@ -148,7 +148,6 @@ server.post('/auth/login', async (req, res) => {
     }
 });
 
-//User
 server.delete('/user/remove', async (req, res) => {
     const { email, password } = req.body;
 
@@ -356,7 +355,6 @@ async function getVideoDetails(videoId) {
         part: 'snippet',
         id: videoId
     });
-    
     const videoDetails = response.data.items[0].snippet;
     return videoDetails;
 }

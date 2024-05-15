@@ -27,5 +27,8 @@
     "pg": "^8.11.5",
     "spotify-web-sdk": "^0.7.2",
     "use-spotify-web-playback-sdk": "^0.2.2"
+  },
+  "devDependencies": {
+    "vite": "^5.2.11"
   }
 }

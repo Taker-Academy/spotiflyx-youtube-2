@@ -11,6 +11,7 @@ function SettingUser() {
   const [menuVisible, setMenuVisible] = useState(false);
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
+  const [password, setPassword] = useState(''); // Ajout de l'état pour le mot de passe dans la suppression du compte
 
   useEffect(() => {
     const fetchData = async () => {
@@ -28,6 +29,16 @@ function SettingUser() {
     fetchData();
   }, []);
 
+  const handleDeleteAccount = async () => {
+    const email = localStorage.getItem('email');
+    try {
+      await axios.delete('http://localhost:8080/user/remove', { data: { email, password: oldPassword } });
+    } catch (error) {
+      console.error(error.response.data.message);
+      window.location.href = '/auth/login';
+    }
+  };  
+
   const toggleMenu = () => {
     setMenuVisible(!menuVisible);
   };
@@ -38,6 +49,10 @@ function SettingUser() {
 
   const handleNewPasswordChange = (e) => {
     setNewPassword(e.target.value);
+  };
+
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value); // Gestion du changement de mot de passe pour la suppression du compte
   };
 
   const handleSubmit = async (e) => {
@@ -59,7 +74,6 @@ function SettingUser() {
 
   return (
     <div>
-      <title>Mon compte - Spotiflyx</title>
       <header>
         <nav>
           <div className="app-container">
@@ -81,7 +95,7 @@ function SettingUser() {
               <div className="title">{userData ? userData.username : ''}</div>
               <ul className="list-items">
                 <li><Link to="/home"><i className="fas fa-home"></i> Accueil</Link></li>
-                <li><Link to="/videos/upload"><i className="fas fa-video"></i> Mettre une video</Link></li>
+                <li><Link to="/videos/upload"><i className="fas fa-video"></i>Mettre du contenue</Link></li>
                 <li><Link to="/user/setting"><i className="fas fa-cog"></i>Mon compte</Link></li>
                 <li><Link to="/user/favorite"><i className="fa-solid fa-bookmark"></i>Mes favoris</Link></li>
                 <li><Link to="#"><i className="fas fa-user"></i>A propos</Link></li>
@@ -122,14 +136,14 @@ function SettingUser() {
                           <p className="m-b-10 f-w-600">Changer le mot de passe</p>
                           <form onSubmit={handleSubmit}>
                             <div className="pass-bar">
-                                <input
-                                  type="password"
-                                  placeholder="Ancien mot de passe"
-                                  value={oldPassword}
-                                  onChange={handleOldPasswordChange}
-                                  required
-                                />
-                              </div>
+                              <input
+                                type="password"
+                                placeholder="Ancien mot de passe"
+                                value={oldPassword}
+                                onChange={handleOldPasswordChange}
+                                required
+                              />
+                            </div>
                             <div className="pass-bar">
                               <input
                                 type="password"
@@ -142,13 +156,27 @@ function SettingUser() {
                             <div className='button_pass'>
                               <button type="submit">Changer le mot de passe</button>
                             </div>
-                            <h6 className="m-b-20 p-b-5 b-b-default f-w-600">Connection</h6>
-                            <div className="row">
-                            <div className="col-sm-6">
-                                <a href="/auth/login" className='lien_user'>Se déconnecter</a>
-                              </div>
-                            </div>
                           </form>
+                        </div>
+                      </div>
+                      <h6 className="m-b-20 p-b-5 b-b-default f-w-600">Connexion</h6>
+                      <div className="row">
+                        <div className="col-sm-6">
+                          <a href="/auth/login" className='lien_user'>Se déconnecter</a>
+                        </div>
+                        <div className="col-sm-6">
+                          <div className="pass-bar">
+                            <input
+                              type="password"
+                              placeholder="Mot de passe"
+                              value={password}
+                              onChange={handlePasswordChange}
+                              required
+                            />
+                          </div>
+                          <div className='button_pass2'>
+                            <button className='lien_user2' onClick={handleDeleteAccount}>Supprimer le compte</button>
+                          </div>
                         </div>
                       </div>
                     </div>

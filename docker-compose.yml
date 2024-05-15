@@ -6,8 +6,8 @@ services:
     container_name: pix_reaction_db
     environment:
       POSTGRES_USER: pix_user
-      POSTGRES_PASSWORD: pixservice123
-      POSTGRES_DB: pix_reaction_db
+      POSTGRES_PASSWORD: ${PASSWORD}
+      POSTGRES_DB: ${DATABASE}
     volumes:
       - /data/pix_reaction_db:/docker-entrypoint-initdb.d/
     networks:
