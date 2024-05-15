@@ -65,6 +65,7 @@ server.use((req, res, next) => {
     next();
 });
 
+//Auth
 server.post('/auth/register', async (req, res) => {
     const { email, password, username } = req.body;
     try {
@@ -147,11 +148,11 @@ server.post('/auth/login', async (req, res) => {
     }
 });
 
+//User
 server.delete('/user/remove', async (req, res) => {
     const { email, password } = req.body;
 
     try {
-        // Assurez-vous que l'utilisateur existe
         const userQuery = 'SELECT * FROM userss WHERE email = $1';
         const userResult = await pool.query(userQuery, [email]);
 
@@ -166,7 +167,6 @@ server.delete('/user/remove', async (req, res) => {
             return res.status(401).json({ ok: false, message: 'Adresse e-mail ou mot de passe incorrect' });
         }
 
-        // Supprimez l'utilisateur de la base de données
         const deleteUserQuery = 'DELETE FROM userss WHERE email = $1';
         await pool.query(deleteUserQuery, [email]);
 
@@ -199,7 +199,6 @@ server.delete('/user/remove', async (req, res) => {
 server.put('/user/edit', async (req, res) => {
     const { email, oldPassword, newPassword } = req.body;
     try {
-        // Recherche de l'utilisateur dans la base de données
         const userQuery = 'SELECT * FROM userss WHERE email = $1';
         const userResult = await pool.query(userQuery, [email]);
 
@@ -209,13 +208,11 @@ server.put('/user/edit', async (req, res) => {
 
         const user = userResult.rows[0];
 
-        // Vérification si l'ancien mot de passe correspond
         const passwordMatch = await bcrypt.compare(oldPassword, user.password);
         if (!passwordMatch) {
             return res.status(401).json({ ok: false, message: 'Ancien mot de passe incorrect' });
         }
 
-        // Mise à jour du mot de passe dans la base de données
         const updatePasswordQuery = 'UPDATE userss SET password = $1 WHERE email = $2';
         const hashedNewPassword = await bcrypt.hash(newPassword, 10);
         await pool.query(updatePasswordQuery, [hashedNewPassword, email]);
@@ -272,11 +269,9 @@ server.get('/user/setting', async (req, res) => {
     }
 });
 
-// Endpoint pour enregistrer l'image de profil de l'utilisateur
 server.post('/user/profilePicture', async (req, res) => {
     const { email } = req.body;
     try {
-        // Mettre à jour le chemin de l'image dans la base de données pour l'utilisateur correspondant à l'email
         const updateQuery = 'UPDATE userss SET profile_picture = $1 WHERE email = $2';
         await pool.query(updateQuery, [req.file.path, email]);
 
@@ -287,7 +282,6 @@ server.post('/user/profilePicture', async (req, res) => {
     }
 });
 
-// Endpoint pour récupérer l'image de profil de l'utilisateur
 server.get('/user/profilePicture', async (req, res) => {
     const { email } = req.body;
     try {
@@ -305,6 +299,7 @@ server.get('/user/profilePicture', async (req, res) => {
     }
 });
 
+//Videos
 server.post('/videos/upload', async (req, res) => {
     const { title, videoLink, email } = req.body;
 
@@ -388,7 +383,6 @@ server.get('/videos/:id', async (req, res) => {
             return res.status(404).json({ ok: false, message: 'Vidéo introuvable' });
         }
 
-        // Si une vidéo est trouvée, renvoyer les détails de la vidéo
         res.status(200).json({ ok: true, video: videoResult.rows[0] });
     } catch (error) {
         console.error(error);
@@ -413,8 +407,7 @@ server.post('/videos/like/:id', async (req, res) => {
         const user = userResult.rows[0];
 
         console.log(user);
-  
-      // Validation
+
       if (!userId || !id) {
         return res.status(400).json({ ok: false, message: 'Identifiants de vidéo ou d\'utilisateur manquants' });
       }
@@ -429,7 +422,6 @@ server.post('/videos/like/:id', async (req, res) => {
         const newLikesCount = (await client.query('SELECT likes FROM videos WHERE id = $1', [id])).rows[0].likes;
         res.status(200).json({ ok: true, likes: newLikesCount });
       } else {
-        // User has not liked the video, add the like
         await client.query('UPDATE videos SET likes = likes + 1 WHERE id = $1', [id]);
         await client.query('UPDATE videos SET likes = likes + 1 WHERE id = $1 RETURNING likes', [id]);
         const newLikesCount = (await client.query('SELECT likes FROM videos WHERE id = $1', [id])).rows[0].likes;
@@ -446,6 +438,8 @@ server.post('/videos/like/:id', async (req, res) => {
     }
 });
 
+
+//Spotify
 server.get('/spotify/token', async (req, res) => {
     try {
         const token = await _getToken();
@@ -470,6 +464,8 @@ const _getToken = async () => {
     return data.access_token;
 };
 
+
+//Videos favorite
 server.post('/videos/favorite/:id', async (req, res) => {
     const { email } = req.body;
     const { id } = req.params;
@@ -484,7 +480,6 @@ server.post('/videos/favorite/:id', async (req, res) => {
 
         const userId = userResult.rows[0].id;
 
-        // Insert the video into user_favorites table
         await pool.query('INSERT INTO user_favorites (user_id, video_id) VALUES ($1, $2)', [userId, id]);
 
         res.status(200).json({ ok: true, message: 'Vidéo ajoutée aux favoris avec succès' });
@@ -496,7 +491,6 @@ server.post('/videos/favorite/:id', async (req, res) => {
 
 server.get('/user/favorites', async (req, res) => {
     const { email } = req.query;
-
     try {
         const userQuery = 'SELECT id FROM userss WHERE email = $1';
         const userResult = await pool.query(userQuery, [email]);
@@ -507,7 +501,6 @@ server.get('/user/favorites', async (req, res) => {
 
         const userId = userResult.rows[0].id;
 
-        // Get the user's favorite videos from the user_favorites table
         const favoritesQuery = 'SELECT videos.* FROM videos JOIN user_favorites ON videos.id = user_favorites.video_id WHERE user_favorites.user_id = $1';
         const favoritesResult = await pool.query(favoritesQuery, [userId]);
 
