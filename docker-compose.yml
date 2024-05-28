@@ -9,7 +9,7 @@ services:
       POSTGRES_PASSWORD: ${PASSWORD}
       POSTGRES_DB: ${DATABASE}
     volumes:
-      - /data/pix_reaction_db:/docker-entrypoint-initdb.d/
+      - ./initdb:/docker-entrypoint-initdb.d/
     networks:
       - overlay
     ports:
@@ -25,6 +25,7 @@ services:
       - "5173:5173"
     networks:
       - overlay
+
 volumes:
   postgres-db:
 
